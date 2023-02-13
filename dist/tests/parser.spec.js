@@ -8,7 +8,7 @@ const expectedBlocks_2 = require("./prodExample2/expectedBlocks");
 describe('NotionParser', () => {
     it('should parse paragraphs', () => {
         const testHtml = '<p>text content</p>';
-        expect(parser_1.default(testHtml)).toStrictEqual([
+        expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 paragraph: {
@@ -20,7 +20,7 @@ describe('NotionParser', () => {
     });
     it('should parse links', () => {
         const testHtml = '<a href="https://notion.so">Click here</a>';
-        expect(parser_1.default(testHtml)).toStrictEqual([
+        expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 paragraph: {
@@ -86,11 +86,11 @@ describe('NotionParser', () => {
                 type: 'heading_3',
             },
         ];
-        expect(parser_1.default(testHtml)).toStrictEqual(expectedBlocks);
+        expect((0, parser_1.default)(testHtml)).toStrictEqual(expectedBlocks);
     });
     it('should parse a serie of text paragraphs', () => {
         const testHtml = '<p>text1<span>text2</span>text3<strong>text4</strong></p>';
-        expect(parser_1.default(testHtml)).toStrictEqual([
+        expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 paragraph: {
@@ -107,7 +107,7 @@ describe('NotionParser', () => {
     });
     it('should parse a multiple paragraph blocks', () => {
         const testHtml = '<div><p>text1</p><p>text2</p><div>text3</div></div>';
-        expect(parser_1.default(testHtml)).toStrictEqual([
+        expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 paragraph: {
@@ -133,7 +133,7 @@ describe('NotionParser', () => {
     });
     it('should parse multiple elements type', () => {
         const testHtml = '<div><h1>Title</h1><p>text <a href="https://notion.so">link</a> text42.</p><p>Another text</p></div>';
-        expect(parser_1.default(testHtml)).toStrictEqual([
+        expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 heading_1: {
@@ -170,7 +170,7 @@ describe('NotionParser', () => {
         ]);
     });
     it('should handle HTML found in production', () => {
-        expect(parser_1.default(rawHtml_1.default)).toStrictEqual(expectedBlocks_1.default);
-        expect(parser_1.default(rawHtml_2.default)).toStrictEqual(expectedBlocks_2.default);
+        expect((0, parser_1.default)(rawHtml_1.default)).toStrictEqual(expectedBlocks_1.default);
+        expect((0, parser_1.default)(rawHtml_2.default)).toStrictEqual(expectedBlocks_2.default);
     });
 });

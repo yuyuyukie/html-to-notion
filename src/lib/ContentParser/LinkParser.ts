@@ -1,5 +1,6 @@
 import ContentParser from '.';
 import { BuildingBlock } from '../models';
+
 class LinkParser extends ContentParser {
   parse = (buildingBlock: BuildingBlock) => {
     if (!buildingBlock.block) {
