@@ -1,6 +1,5 @@
 import ContentParser from '.';
 import { BuildingBlock } from '../models';
-
 class LinkParser extends ContentParser {
   parse = (buildingBlock: BuildingBlock) => {
     if (!buildingBlock.block) {
@@ -16,14 +15,14 @@ class LinkParser extends ContentParser {
                 text: {
                   content: this.content,
                   link: {
-                    url: buildingBlock.src,
-                  },
-                },
-              },
-            ],
-          },
+                    url: buildingBlock.src
+                  }
+                }
+              }
+            ]
+          }
         },
-        type: 'paragraph',
+        type: 'paragraph'
       } as BuildingBlock;
     }
     if (!buildingBlock.type) return buildingBlock;
@@ -35,9 +34,9 @@ class LinkParser extends ContentParser {
       text: {
         content: this.content,
         link: {
-          url: buildingBlock.src,
-        },
-      },
+          url: buildingBlock.src
+        }
+      }
     });
     return buildingBlock;
   };

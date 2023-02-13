@@ -3,7 +3,7 @@ import { BuildingBlock } from '../models';
 import {
   HtmlTextTags,
   NotionTextTypes,
-  textTagNameToNotionTypeMap,
+  textTagNameToNotionTypeMap
 } from '../notionUtils';
 
 class TextParser extends ContentParser {
@@ -26,13 +26,13 @@ class TextParser extends ContentParser {
               {
                 type: 'text',
                 text: {
-                  content: this.content,
-                },
-              },
-            ],
-          },
+                  content: this.content
+                }
+              }
+            ]
+          }
         } as any,
-        type: this.type,
+        type: this.type
       } as BuildingBlock;
     }
     if (buildingBlock.type) {
@@ -42,8 +42,8 @@ class TextParser extends ContentParser {
       buildingBlock.block[buildingBlock.type].text.push({
         type: 'text',
         text: {
-          content: this.content,
-        },
+          content: this.content
+        }
       });
     }
     return buildingBlock;
