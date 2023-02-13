@@ -15,14 +15,14 @@ class LinkParser extends ContentParser {
                 text: {
                   content: this.content,
                   link: {
-                    url: buildingBlock.src
-                  }
-                }
-              }
-            ]
-          }
+                    url: buildingBlock.src,
+                  },
+                },
+              },
+            ],
+          },
         },
-        type: 'paragraph'
+        type: 'paragraph',
       } as BuildingBlock;
     }
     if (!buildingBlock.type) return buildingBlock;
@@ -34,9 +34,9 @@ class LinkParser extends ContentParser {
       text: {
         content: this.content,
         link: {
-          url: buildingBlock.src
-        }
-      }
+          url: buildingBlock.src,
+        },
+      },
     });
     return buildingBlock;
   };
