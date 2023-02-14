@@ -1,0 +1,15 @@
+name: Actions
+on:
+  push:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: yarn install
+        run: yarn install --frozen-lock-files
+      - name: Run test
+        run: yarn test
+# https://qiita.com/sayama0402/items/6e71fa53277fa0082489

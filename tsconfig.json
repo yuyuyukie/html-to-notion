@@ -6,7 +6,8 @@
     "moduleResolution": "Node",
     "module": "commonjs",
     "declaration": true,
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": ["src/**/*", "tests/**/*"],
 }
