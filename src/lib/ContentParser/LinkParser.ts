@@ -10,7 +10,7 @@ class LinkParser extends ContentParser {
           object: 'block',
           type: 'paragraph',
           paragraph: {
-            text: [
+            rich_text: [
               {
                 type: 'text',
                 text: {

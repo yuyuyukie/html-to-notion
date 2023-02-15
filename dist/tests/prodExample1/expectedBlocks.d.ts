@@ -1,8 +1,20 @@
-import { HeadingOneBlock, ParagraphBlock } from '@notionhq/client/build/src/api-types';
-declare const expectedBlocks: (ParagraphBlock | HeadingOneBlock | {
+import { Heading1BlockObjectResponse, Heading2BlockObjectResponse, ParagraphBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+declare const expectedBlocks: (ParagraphBlockObjectResponse | Heading1BlockObjectResponse | Heading2BlockObjectResponse | {
     object: string;
     paragraph: {
-        text: ({
+        text: {
+            text: {
+                content: string;
+            };
+            type: string;
+        }[];
+        rich_text?: undefined;
+    };
+    type: string;
+} | {
+    object: string;
+    paragraph: {
+        rich_text: ({
             text: {
                 content: string;
                 link?: undefined;
@@ -17,20 +29,8 @@ declare const expectedBlocks: (ParagraphBlock | HeadingOneBlock | {
             };
             type: string;
         })[];
+        text?: undefined;
     };
     type: string;
-    heading_2?: undefined;
-} | {
-    object: string;
-    heading_2: {
-        text: {
-            text: {
-                content: string;
-            };
-            type: string;
-        }[];
-    };
-    type: string;
-    paragraph?: undefined;
 })[];
 export default expectedBlocks;

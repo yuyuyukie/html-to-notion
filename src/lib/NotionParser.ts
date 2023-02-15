@@ -1,19 +1,19 @@
-import { Block } from '@notionhq/client/build/src/api-types';
 import ContentParser from './ContentParser';
 import LinkParser from './ContentParser/LinkParser';
 import TextParser from './ContentParser/TextParser';
 import { BuildingBlock } from './models';
+import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
 
-  private producedBlocks: Block[] = [];
+  private producedBlocks: BlockObjectResponse[] = [];
 
   private currentElementsStack: string[] = [];
 
   private isWaitingForBodyElement: boolean = false;
 
-  getBlocks = (): Block[] => this.producedBlocks;
+  getBlocks = (): BlockObjectResponse[] => this.producedBlocks;
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
     this.preCheckHtmlFormat(tagName);

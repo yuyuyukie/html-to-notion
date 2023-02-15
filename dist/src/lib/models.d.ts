@@ -1,6 +1,6 @@
-import { Block } from '@notionhq/client/build/src/api-types';
+import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 export type BuildingBlock = {
-    block?: Block;
+    block?: BlockObjectResponse;
     type?: string;
     src?: string;
 };

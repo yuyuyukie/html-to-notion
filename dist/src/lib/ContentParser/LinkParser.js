@@ -10,7 +10,7 @@ class LinkParser extends _1.default {
                         object: 'block',
                         type: 'paragraph',
                         paragraph: {
-                            text: [
+                            rich_text: [
                                 {
                                     type: 'text',
                                     text: {
