@@ -12,7 +12,7 @@ const initParser = (notionParser: NotionParser) =>
     },
     onclosetag() {
       notionParser.onCloseTag();
-    }
+    },
   });
 
 const parseHtmlToNotionBlocks = (html: string): BlockObjectResponse[] => {
