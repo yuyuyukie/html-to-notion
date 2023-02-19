@@ -105,11 +105,8 @@ class NotionParser {
       // case 'a': {
       //   return new LinkParser(content);
       // }
-      case 'paragraph': {
-        return new ParagraphParser(content, 'paragraph');
-      }
       default: {
-        return undefined;
+        return new ParagraphParser(content, 'paragraph');
       }
     }
   };

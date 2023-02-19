@@ -4,7 +4,7 @@ import { ParagraphObjectRequest } from '../type/blockObjectRequests';
 
 export type Type = NonNullable<BuildingBlock<ParagraphObjectRequest>['type']>;
 
-type HeadingBuildingBlock = BuildingBlock<ParagraphObjectRequest>;
+type ParagraphBuildingBlock = BuildingBlock<ParagraphObjectRequest>;
 
 class ParagraphParser extends ContentParser {
   private readonly type: Type;
@@ -15,25 +15,23 @@ class ParagraphParser extends ContentParser {
   }
 
   parse = (
-    buildingBlock: HeadingBuildingBlock
-  ): undefined | HeadingBuildingBlock => {
-    if (buildingBlock.type === undefined) {
-      return undefined;
-    }
+    buildingBlock: ParagraphBuildingBlock
+  ): ParagraphBuildingBlock => {
     if (!buildingBlock.block) {
-      return {
+      buildingBlock = {
         type: 'paragraph',
         block: {
           paragraph: { rich_text: [] },
           type: 'paragraph',
-        },
+          object: 'block'
+        }
       };
     }
-    buildingBlock.block.paragraph.rich_text.push({
+    buildingBlock.block?.paragraph.rich_text.push({
       type: 'text',
       text: {
-        content: this.content,
-      },
+        content: this.content
+      }
     });
     return buildingBlock;
   };

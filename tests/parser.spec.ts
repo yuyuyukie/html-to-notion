@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import parseHtmlToNotionBlocks from '../src/lib/parser';
 import rawHtmlOne from './prodExample1/rawHtml';
 import expectedBlocksOne from './prodExample1/expectedBlocks';
@@ -12,7 +11,7 @@ describe('NotionParser', () => {
       {
         object: 'block',
         paragraph: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'paragraph',
       },
