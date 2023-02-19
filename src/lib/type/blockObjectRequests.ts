@@ -9,15 +9,17 @@ import {
 import { BlockObjectRequestWithoutChildren } from '@notionhq/client/build/src/api-endpoints';
 
 
-type EmbedObjectRequest = {
-  embed: {
+export type BaseBlockObject<T> = {
+  type?: T;
+  object?: 'block';
+}
+export type EmbedObjectRequest<T extends "embed" = "embed"> = {
+  [key in T]: {
     url: string;
     caption?: Array<RichTextItemRequest>;
   };
-  type?: 'embed';
-  object?: 'block';
-}
-type BookmarkObjectRequest = {
+} & BaseBlockObject<T>
+export type BookmarkObjectRequest = {
   bookmark: {
     url: string;
     caption?: Array<RichTextItemRequest>;
@@ -25,7 +27,7 @@ type BookmarkObjectRequest = {
   type?: 'bookmark';
   object?: 'block';
 }
-type ImageObjectRequest = {
+export type ImageObjectRequest = {
   image: {
     external: {
       url: TextRequest;
@@ -36,7 +38,7 @@ type ImageObjectRequest = {
   type?: 'image';
   object?: 'block';
 }
-type VideoObjectRequest = {
+export type VideoObjectRequest = {
   video: {
     external: {
       url: TextRequest;
@@ -47,7 +49,7 @@ type VideoObjectRequest = {
   type?: 'video';
   object?: 'block';
 }
-type PdfObjectRequest = {
+export type PdfObjectRequest = {
   pdf: {
     external: {
       url: TextRequest;
@@ -58,7 +60,7 @@ type PdfObjectRequest = {
   type?: 'pdf';
   object?: 'block';
 }
-type FileObjectRequest = {
+export type FileObjectRequest = {
   file: {
     external: {
       url: TextRequest;
@@ -69,7 +71,7 @@ type FileObjectRequest = {
   type?: 'file';
   object?: 'block';
 }
-type AudioObjectRequest = {
+export type AudioObjectRequest = {
   audio: {
     external: {
       url: TextRequest;
@@ -80,7 +82,7 @@ type AudioObjectRequest = {
   type?: 'audio';
   object?: 'block';
 }
-type CodeObjectRequest = {
+export type CodeObjectRequest = {
   code: {
     rich_text: Array<RichTextItemRequest>;
     language: LanguageRequest;
@@ -89,31 +91,31 @@ type CodeObjectRequest = {
   type?: 'code';
   object?: 'block';
 }
-type EquationObjectRequest = {
+export type EquationObjectRequest = {
   equation: {
     expression: string;
   };
   type?: 'equation';
   object?: 'block';
 }
-type DividerObjectRequest = {
+export type DividerObjectRequest = {
   divider: EmptyObject;
   type?: 'divider';
   object?: 'block';
 }
-type BreadcrumbObjectRequest = {
+export type BreadcrumbObjectRequest = {
   breadcrumb: EmptyObject;
   type?: 'breadcrumb';
   object?: 'block';
 }
-type TocObjectRequest = {
+export type TocObjectRequest = {
   table_of_contents: {
     color?: ApiColor;
   };
   type?: 'table_of_contents';
   object?: 'block';
 }
-type LinkToPageObjectRequest = {
+export type LinkToPageObjectRequest = {
   link_to_page: {
     page_id: IdRequest;
     type?: 'page_id';
@@ -127,239 +129,18 @@ type LinkToPageObjectRequest = {
   type?: 'link_to_page';
   object?: 'block';
 }
-type TableRowObjectRequest = {
+export type TableRowObjectRequest = {
   table_row: {
     cells: Array<Array<RichTextItemRequest>>;
   };
   type?: 'table_row';
   object?: 'block';
 }
-type ColumnListObjectRequest = {
+export type ColumnListObjectRequest = {
   column_list: {
     children: Array<{
       column: {
-        children: Array<{
-          embed: {
-            url: string;
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'embed';
-          object?: 'block';
-        } | {
-          bookmark: {
-            url: string;
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'bookmark';
-          object?: 'block';
-        } | {
-          image: {
-            external: {
-              url: TextRequest;
-            };
-            type?: 'external';
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'image';
-          object?: 'block';
-        } | {
-          video: {
-            external: {
-              url: TextRequest;
-            };
-            type?: 'external';
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'video';
-          object?: 'block';
-        } | {
-          pdf: {
-            external: {
-              url: TextRequest;
-            };
-            type?: 'external';
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'pdf';
-          object?: 'block';
-        } | {
-          file: {
-            external: {
-              url: TextRequest;
-            };
-            type?: 'external';
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'file';
-          object?: 'block';
-        } | {
-          audio: {
-            external: {
-              url: TextRequest;
-            };
-            type?: 'external';
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'audio';
-          object?: 'block';
-        } | {
-          code: {
-            rich_text: Array<RichTextItemRequest>;
-            language: LanguageRequest;
-            caption?: Array<RichTextItemRequest>;
-          };
-          type?: 'code';
-          object?: 'block';
-        } | {
-          equation: {
-            expression: string;
-          };
-          type?: 'equation';
-          object?: 'block';
-        } | {
-          divider: EmptyObject;
-          type?: 'divider';
-          object?: 'block';
-        } | {
-          breadcrumb: EmptyObject;
-          type?: 'breadcrumb';
-          object?: 'block';
-        } | {
-          table_of_contents: {
-            color?: ApiColor;
-          };
-          type?: 'table_of_contents';
-          object?: 'block';
-        } | {
-          link_to_page: {
-            page_id: IdRequest;
-            type?: 'page_id';
-          } | {
-            database_id: IdRequest;
-            type?: 'database_id';
-          } | {
-            comment_id: IdRequest;
-            type?: 'comment_id';
-          };
-          type?: 'link_to_page';
-          object?: 'block';
-        } | {
-          table_row: {
-            cells: Array<Array<RichTextItemRequest>>;
-          };
-          type?: 'table_row';
-          object?: 'block';
-        } | {
-          heading_1: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            is_toggleable?: boolean;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'heading_1';
-          object?: 'block';
-        } | {
-          heading_2: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            is_toggleable?: boolean;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'heading_2';
-          object?: 'block';
-        } | {
-          heading_3: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            is_toggleable?: boolean;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'heading_3';
-          object?: 'block';
-        } | {
-          paragraph: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'paragraph';
-          object?: 'block';
-        } | {
-          bulleted_list_item: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'bulleted_list_item';
-          object?: 'block';
-        } | {
-          numbered_list_item: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'numbered_list_item';
-          object?: 'block';
-        } | {
-          quote: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'quote';
-          object?: 'block';
-        } | {
-          to_do: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-            checked?: boolean;
-          };
-          type?: 'to_do';
-          object?: 'block';
-        } | {
-          toggle: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'toggle';
-          object?: 'block';
-        } | {
-          template: {
-            rich_text: Array<RichTextItemRequest>;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'template';
-          object?: 'block';
-        } | {
-          callout: {
-            rich_text: Array<RichTextItemRequest>;
-            color?: ApiColor;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-            icon?: {
-              emoji: EmojiRequest;
-              type?: 'emoji';
-            } | {
-              external: {
-                url: TextRequest;
-              };
-              type?: 'external';
-            };
-          };
-          type?: 'callout';
-          object?: 'block';
-        } | {
-          synced_block: {
-            synced_from: {
-              block_id: IdRequest;
-              type?: 'block_id';
-            } | null;
-            children?: Array<BlockObjectRequestWithoutChildren>;
-          };
-          type?: 'synced_block';
-          object?: 'block';
-        }>;
+        children: Array<BlockObjectRequestType>;
       };
       type?: 'column';
       object?: 'block';
@@ -368,7 +149,7 @@ type ColumnListObjectRequest = {
   type?: 'column_list';
   object?: 'block';
 }
-type ColumnObjectRequest = {
+export type ColumnObjectRequest = {
   column: {
     children: Array<{
       embed: {
@@ -596,7 +377,7 @@ type ColumnObjectRequest = {
   type?: 'column';
   object?: 'block';
 }
-type TableObjectRequest = {
+export type TableObjectRequest = {
   table: {
     table_width: number;
     children: Array<BlockObjectRequestWithoutChildren>;
@@ -606,469 +387,27 @@ type TableObjectRequest = {
   type?: 'table';
   object?: 'block';
 }
-type Heading1ObjectRequest = {
+export type Heading1ObjectRequest = {
   heading_1: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
     is_toggleable?: boolean;
-    children?: Array<{
-      embed: {
-        url: string;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'embed';
-      object?: 'block';
-    } | {
-      bookmark: {
-        url: string;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'bookmark';
-      object?: 'block';
-    } | {
-      image: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'image';
-      object?: 'block';
-    } | {
-      video: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'video';
-      object?: 'block';
-    } | {
-      pdf: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'pdf';
-      object?: 'block';
-    } | {
-      file: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'file';
-      object?: 'block';
-    } | {
-      audio: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'audio';
-      object?: 'block';
-    } | {
-      code: {
-        rich_text: Array<RichTextItemRequest>;
-        language: LanguageRequest;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'code';
-      object?: 'block';
-    } | {
-      equation: {
-        expression: string;
-      };
-      type?: 'equation';
-      object?: 'block';
-    } | {
-      divider: EmptyObject;
-      type?: 'divider';
-      object?: 'block';
-    } | {
-      breadcrumb: EmptyObject;
-      type?: 'breadcrumb';
-      object?: 'block';
-    } | {
-      table_of_contents: {
-        color?: ApiColor;
-      };
-      type?: 'table_of_contents';
-      object?: 'block';
-    } | {
-      link_to_page: {
-        page_id: IdRequest;
-        type?: 'page_id';
-      } | {
-        database_id: IdRequest;
-        type?: 'database_id';
-      } | {
-        comment_id: IdRequest;
-        type?: 'comment_id';
-      };
-      type?: 'link_to_page';
-      object?: 'block';
-    } | {
-      table_row: {
-        cells: Array<Array<RichTextItemRequest>>;
-      };
-      type?: 'table_row';
-      object?: 'block';
-    } | {
-      heading_1: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_1';
-      object?: 'block';
-    } | {
-      heading_2: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_2';
-      object?: 'block';
-    } | {
-      heading_3: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_3';
-      object?: 'block';
-    } | {
-      paragraph: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'paragraph';
-      object?: 'block';
-    } | {
-      bulleted_list_item: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'bulleted_list_item';
-      object?: 'block';
-    } | {
-      numbered_list_item: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'numbered_list_item';
-      object?: 'block';
-    } | {
-      quote: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'quote';
-      object?: 'block';
-    } | {
-      to_do: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-        checked?: boolean;
-      };
-      type?: 'to_do';
-      object?: 'block';
-    } | {
-      toggle: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'toggle';
-      object?: 'block';
-    } | {
-      template: {
-        rich_text: Array<RichTextItemRequest>;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'template';
-      object?: 'block';
-    } | {
-      callout: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-        icon?: {
-          emoji: EmojiRequest;
-          type?: 'emoji';
-        } | {
-          external: {
-            url: TextRequest;
-          };
-          type?: 'external';
-        };
-      };
-      type?: 'callout';
-      object?: 'block';
-    } | {
-      synced_block: {
-        synced_from: {
-          block_id: IdRequest;
-          type?: 'block_id';
-        } | null;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'synced_block';
-      object?: 'block';
-    }>;
+    children?: Array<BlockObjectRequestType>;
   };
   type?: 'heading_1';
   object?: 'block';
 }
-type Heading2ObjectRequest = {
+export type Heading2ObjectRequest = {
   heading_2: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
     is_toggleable?: boolean;
-    children?: Array<{
-      embed: {
-        url: string;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'embed';
-      object?: 'block';
-    } | {
-      bookmark: {
-        url: string;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'bookmark';
-      object?: 'block';
-    } | {
-      image: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'image';
-      object?: 'block';
-    } | {
-      video: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'video';
-      object?: 'block';
-    } | {
-      pdf: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'pdf';
-      object?: 'block';
-    } | {
-      file: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'file';
-      object?: 'block';
-    } | {
-      audio: {
-        external: {
-          url: TextRequest;
-        };
-        type?: 'external';
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'audio';
-      object?: 'block';
-    } | {
-      code: {
-        rich_text: Array<RichTextItemRequest>;
-        language: LanguageRequest;
-        caption?: Array<RichTextItemRequest>;
-      };
-      type?: 'code';
-      object?: 'block';
-    } | {
-      equation: {
-        expression: string;
-      };
-      type?: 'equation';
-      object?: 'block';
-    } | {
-      divider: EmptyObject;
-      type?: 'divider';
-      object?: 'block';
-    } | {
-      breadcrumb: EmptyObject;
-      type?: 'breadcrumb';
-      object?: 'block';
-    } | {
-      table_of_contents: {
-        color?: ApiColor;
-      };
-      type?: 'table_of_contents';
-      object?: 'block';
-    } | {
-      link_to_page: {
-        page_id: IdRequest;
-        type?: 'page_id';
-      } | {
-        database_id: IdRequest;
-        type?: 'database_id';
-      } | {
-        comment_id: IdRequest;
-        type?: 'comment_id';
-      };
-      type?: 'link_to_page';
-      object?: 'block';
-    } | {
-      table_row: {
-        cells: Array<Array<RichTextItemRequest>>;
-      };
-      type?: 'table_row';
-      object?: 'block';
-    } | {
-      heading_1: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_1';
-      object?: 'block';
-    } | {
-      heading_2: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_2';
-      object?: 'block';
-    } | {
-      heading_3: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        is_toggleable?: boolean;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'heading_3';
-      object?: 'block';
-    } | {
-      paragraph: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'paragraph';
-      object?: 'block';
-    } | {
-      bulleted_list_item: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'bulleted_list_item';
-      object?: 'block';
-    } | {
-      numbered_list_item: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'numbered_list_item';
-      object?: 'block';
-    } | {
-      quote: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'quote';
-      object?: 'block';
-    } | {
-      to_do: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-        checked?: boolean;
-      };
-      type?: 'to_do';
-      object?: 'block';
-    } | {
-      toggle: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'toggle';
-      object?: 'block';
-    } | {
-      template: {
-        rich_text: Array<RichTextItemRequest>;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'template';
-      object?: 'block';
-    } | {
-      callout: {
-        rich_text: Array<RichTextItemRequest>;
-        color?: ApiColor;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-        icon?: {
-          emoji: EmojiRequest;
-          type?: 'emoji';
-        } | {
-          external: {
-            url: TextRequest;
-          };
-          type?: 'external';
-        };
-      };
-      type?: 'callout';
-      object?: 'block';
-    } | {
-      synced_block: {
-        synced_from: {
-          block_id: IdRequest;
-          type?: 'block_id';
-        } | null;
-        children?: Array<BlockObjectRequestWithoutChildren>;
-      };
-      type?: 'synced_block';
-      object?: 'block';
-    }>;
+    children?: Array<BlockObjectRequestType>;
   };
   type?: 'heading_2';
   object?: 'block';
 }
-type Heading3ObjectRequest = {
+export type Heading3ObjectRequest = {
   heading_3: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1078,7 +417,7 @@ type Heading3ObjectRequest = {
   type?: 'heading_3';
   object?: 'block';
 }
-type ParagraphObjectRequest = {
+export type ParagraphObjectRequest = {
   paragraph: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1087,7 +426,7 @@ type ParagraphObjectRequest = {
   type?: 'paragraph';
   object?: 'block';
 }
-type BulletedListItemObjectRequest = {
+export type BulletedListItemObjectRequest = {
   bulleted_list_item: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1096,7 +435,7 @@ type BulletedListItemObjectRequest = {
   type?: 'bulleted_list_item';
   object?: 'block';
 }
-type NumberedListItemObjectRequest = {
+export type NumberedListItemObjectRequest = {
   numbered_list_item: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1105,7 +444,7 @@ type NumberedListItemObjectRequest = {
   type?: 'numbered_list_item';
   object?: 'block';
 }
-type QuoteObjectRequest = {
+export type QuoteObjectRequest = {
   quote: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1114,7 +453,7 @@ type QuoteObjectRequest = {
   type?: 'quote';
   object?: 'block';
 }
-type ToDoObjectRequest = {
+export type ToDoObjectRequest = {
   to_do: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1124,7 +463,7 @@ type ToDoObjectRequest = {
   type?: 'to_do';
   object?: 'block';
 }
-type ToggleObjectRequest = {
+export type ToggleObjectRequest = {
   toggle: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1133,7 +472,7 @@ type ToggleObjectRequest = {
   type?: 'toggle';
   object?: 'block';
 }
-type TemplateObjectRequest = {
+export type TemplateObjectRequest = {
   template: {
     rich_text: Array<RichTextItemRequest>;
     children?: Array<BlockObjectRequestType>;
@@ -1141,7 +480,7 @@ type TemplateObjectRequest = {
   type?: 'template';
   object?: 'block';
 }
-type CalloutObjectRequest = {
+export type CalloutObjectRequest = {
   callout: {
     rich_text: Array<RichTextItemRequest>;
     color?: ApiColor;
@@ -1159,7 +498,7 @@ type CalloutObjectRequest = {
   type?: 'callout';
   object?: 'block';
 }
-type SyncedBlockObjectRequest = {
+export type SyncedBlockObjectRequest = {
   synced_block: {
     synced_from: {
       block_id: IdRequest;

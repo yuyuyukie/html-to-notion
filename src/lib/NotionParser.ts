@@ -1,28 +1,27 @@
 import ContentParser from './ContentParser';
-import LinkParser from './ContentParser/LinkParser';
+// import LinkParser from './ContentParser/LinkParser';
 import TextParser from './ContentParser/TextParser';
 import { BuildingBlock } from './models';
-import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { textTagNameToNotionTypeMap } from './notionUtils';
+import { BlockObjectRequestType } from './type/blockObjectRequests';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
 
-  private producedBlocks: BlockObjectResponse[] = [];
+  private producedBlocks: BlockObjectRequestType[] = [];
 
   private currentElementsStack: string[] = [];
 
   private isWaitingForBodyElement: boolean = false;
 
-  getBlocks = (): BlockObjectResponse[] => this.producedBlocks;
+  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks;
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
-    const isBuildingBlock =
-      this.currentElementsStack.length > 0 && this.buildingBlock?.block;
-    if (isBuildingBlock) {
+    if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
       if (tagName === 'br') {
-        this.producedBlocks.push(this.buildingBlock.block!);
+        this.producedBlocks.push(this.buildingBlock.block);
         this.flushBuildingBlock();
       }
       this.currentElementsStack.push(tagName);
@@ -67,7 +66,11 @@ class NotionParser {
         cleanContent = addSpaceBeforeContent(cleanContent);
       }
       const contentParser = this.initContentParser(cleanContent);
-      this.buildingBlock = contentParser.parse(this.buildingBlock);
+      if (!contentParser) return;
+      const buildingBlock = contentParser.parse(this.buildingBlock);
+      if (buildingBlock) {
+        this.buildingBlock = buildingBlock;
+      }
     }
   };
 
@@ -88,22 +91,22 @@ class NotionParser {
     this.currentElementsStack = [];
   };
 
-  initContentParser = (content: string): ContentParser => {
+  initContentParser = (content: string): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
-    switch (tagName) {
-      case 'h1':
-      case 'h2':
-      case 'h3':
-      case 'h4':
-      case 'h5':
-      case 'h6': {
-        return new TextParser(content, tagName);
+    if (!tagName) return;
+    const blockType = textTagNameToNotionTypeMap.get(tagName);
+    if (!blockType) return;
+    switch (blockType) {
+      case 'heading_1':
+      case 'heading_2':
+      case 'heading_3': {
+        return new TextParser(content, blockType);
       }
-      case 'a': {
-        return new LinkParser(content);
-      }
+      // case 'a': {
+      //   return new LinkParser(content);
+      // }
       default: {
-        return new TextParser(content, 'p');
+        return new TextParser(content, 'paragraph');
       }
     }
   };

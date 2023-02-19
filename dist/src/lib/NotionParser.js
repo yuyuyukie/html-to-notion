@@ -42,7 +42,7 @@ class NotionParser {
                 if (currentBlockHasText) {
                     cleanContent = addSpaceBeforeContent(cleanContent);
                 }
-                const contentParser = this.initContentParser(cleanContent);
+                const contentParser = this.---initContentParser(cleanContent);
                 this.buildingBlock = contentParser.parse(this.buildingBlock);
             }
         };

@@ -1,7 +1,8 @@
-import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { NotionBlockType } from './notionUtils';
+import { BlockObjectRequestType } from './type/blockObjectRequests';
 
-export type BuildingBlock = {
-  block?: BlockObjectResponse;
-  type?: string;
+export type BuildingBlock<T = BlockObjectRequestType> = {
+  block?: Extract<BlockObjectRequestType, T>;
+  type?: NotionBlockType;
   src?: string;
 };

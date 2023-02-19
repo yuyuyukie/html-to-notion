@@ -11,7 +11,7 @@ const initParser = (notionParser) => new htmlparser2_1.Parser({
     },
     onclosetag() {
         notionParser.onCloseTag();
-    }
+    },
 });
 const parseHtmlToNotionBlocks = (html) => {
     const notionParser = new NotionParser_1.default();

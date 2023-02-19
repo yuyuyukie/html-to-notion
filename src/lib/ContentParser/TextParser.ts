@@ -1,39 +1,37 @@
 import ContentParser from '.';
 import { BuildingBlock } from '../models';
 import {
-  HtmlTextTags,
-  NotionTextTypes,
-  textTagNameToNotionTypeMap,
+  NotionBlockType
 } from '../notionUtils';
+import { Heading1ObjectRequest, Heading2ObjectRequest, Heading3ObjectRequest } from '../type/blockObjectRequests';
+
+type HeadingBuildingBlock = BuildingBlock<Heading1ObjectRequest | Heading2ObjectRequest | Heading3ObjectRequest>
 
 class TextParser extends ContentParser {
-  private type: NotionTextTypes;
+  private readonly type: Extract<NotionBlockType, 'heading_1' | 'heading_2' | 'heading_3'> | undefined;
 
-  constructor(content: string, tagName: HtmlTextTags) {
+  constructor(content: string, type: Extract<NotionBlockType, 'heading_1' | 'heading_2' | 'heading_3'>) {
     super(content);
-    this.type = textTagNameToNotionTypeMap.get(tagName) as NotionTextTypes;
+    this.type = type;
   }
 
-  parse = (buildingBlock: BuildingBlock) => {
+  parse = (buildingBlock: HeadingBuildingBlock): undefined | HeadingBuildingBlock => {
+    if (buildingBlock.type === undefined || this.type === undefined) {
+      return undefined;
+    }
     if (!buildingBlock.block) {
       return {
         ...buildingBlock,
         block: {
+          // TODO this.typeをユニオンにするととれなくなる
           object: 'block',
           type: this.type,
           [this.type]: {
-            text: [
-              {
-                type: 'text',
-                text: {
-                  content: this.content,
-                },
-              },
-            ],
-          },
-        } as any,
-        type: this.type,
-      } as BuildingBlock;
+            rich_text: []
+          }
+        },
+        type: this.type
+      };
     }
     if (buildingBlock.type) {
       // Tricky dynamic type part. Disabling...
@@ -42,8 +40,8 @@ class TextParser extends ContentParser {
       buildingBlock.block[buildingBlock.type].text.push({
         type: 'text',
         text: {
-          content: this.content,
-        },
+          content: this.content
+        }
       });
     }
     return buildingBlock;
