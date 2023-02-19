@@ -3,7 +3,7 @@ import { BuildingBlock } from './models';
 import { BlockObjectRequestType } from './type/blockObjectRequests';
 import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
-import { textTagNameToNotionTypeMap } from './config';
+import { tagNameToNotionBlockType } from './config';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
@@ -87,7 +87,7 @@ class NotionParser {
   initContentParser = (content: string): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
     if (!tagName) return;
-    const blockType = textTagNameToNotionTypeMap.get(tagName);
+    const blockType = tagNameToNotionBlockType[tagName];
     switch (blockType) {
       case 'heading_1':
       case 'heading_2':
