@@ -1,9 +1,9 @@
-import ContentParser from './ContentParser';
-// import LinkParser from './ContentParser/LinkParser';
-import TextParser from './ContentParser/TextParser';
+import ContentParser from './parsers';
 import { BuildingBlock } from './models';
 import { textTagNameToNotionTypeMap } from './notionUtils';
 import { BlockObjectRequestType } from './type/blockObjectRequests';
+import HeadingParser from './parsers/HeadingParser';
+import ParagraphParser from './parsers/ParagraphParser';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
@@ -100,13 +100,16 @@ class NotionParser {
       case 'heading_1':
       case 'heading_2':
       case 'heading_3': {
-        return new TextParser(content, blockType);
+        return new HeadingParser(content, blockType);
       }
       // case 'a': {
       //   return new LinkParser(content);
       // }
+      case 'paragraph': {
+        return new ParagraphParser(content, 'paragraph');
+      }
       default: {
-        return new TextParser(content, 'paragraph');
+        return undefined;
       }
     }
   };
