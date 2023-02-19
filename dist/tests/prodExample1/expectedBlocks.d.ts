@@ -1,5 +1,5 @@
 import { Heading1BlockObjectResponse, Heading2BlockObjectResponse, ParagraphBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-declare const expectedBlocks: (ParagraphBlockObjectResponse | Heading1BlockObjectResponse | Heading2BlockObjectResponse | {
+declare const expectedBlocks: (Heading1BlockObjectResponse | ParagraphBlockObjectResponse | Heading2BlockObjectResponse | {
     object: string;
     paragraph: {
         text: {

@@ -1,11 +1,11 @@
-import ContentParser from './ContentParser';
-import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import ContentParser from './parsers';
+import { BlockObjectRequestType } from './type/blockObjectRequests';
 declare class NotionParser {
     private buildingBlock;
     private producedBlocks;
     private currentElementsStack;
     private isWaitingForBodyElement;
-    getBlocks: () => BlockObjectResponse[];
+    getBlocks: () => BlockObjectRequestType[];
     onOpenTag: (tagName: string, attributes: {
         [s: string]: string;
     }) => void;
@@ -15,6 +15,6 @@ declare class NotionParser {
     onCloseTag: () => void;
     flushBuildingBlock: () => void;
     flushElementStack: () => void;
-    initContentParser: (content: string) => ContentParser;
+    initContentParser: (content: string) => ContentParser | undefined;
 }
 export default NotionParser;

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LinkParser_1 = require("./ContentParser/LinkParser");
-const TextParser_1 = require("./ContentParser/TextParser");
+const notionUtils_1 = require("./notionUtils");
+const HeadingParser_1 = require("./parsers/HeadingParser");
+const ParagraphParser_1 = require("./parsers/ParagraphParser");
 class NotionParser {
     constructor() {
         this.buildingBlock = {};
@@ -14,8 +15,7 @@ class NotionParser {
             this.preCheckHtmlFormat(tagName);
             if (this.isWaitingForBodyElement)
                 return;
-            const isBuildingBlock = this.currentElementsStack.length > 0 && ((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block);
-            if (isBuildingBlock) {
+            if (this.currentElementsStack.length > 0 && !!((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block)) {
                 if (tagName === 'br') {
                     this.producedBlocks.push(this.buildingBlock.block);
                     this.flushBuildingBlock();
@@ -42,8 +42,13 @@ class NotionParser {
                 if (currentBlockHasText) {
                     cleanContent = addSpaceBeforeContent(cleanContent);
                 }
-                const contentParser = this.---initContentParser(cleanContent);
-                this.buildingBlock = contentParser.parse(this.buildingBlock);
+                const contentParser = this.initContentParser(cleanContent);
+                if (!contentParser)
+                    return;
+                const buildingBlock = contentParser.parse(this.buildingBlock);
+                if (buildingBlock) {
+                    this.buildingBlock = buildingBlock;
+                }
             }
         };
         this.onCloseTag = () => {
@@ -64,20 +69,25 @@ class NotionParser {
         };
         this.initContentParser = (content) => {
             const tagName = [...this.currentElementsStack].pop();
-            switch (tagName) {
-                case 'h1':
-                case 'h2':
-                case 'h3':
-                case 'h4':
-                case 'h5':
-                case 'h6': {
-                    return new TextParser_1.default(content, tagName);
+            if (!tagName)
+                return;
+            const blockType = notionUtils_1.textTagNameToNotionTypeMap.get(tagName);
+            if (!blockType)
+                return;
+            switch (blockType) {
+                case 'heading_1':
+                case 'heading_2':
+                case 'heading_3': {
+                    return new HeadingParser_1.default(content, blockType);
                 }
-                case 'a': {
-                    return new LinkParser_1.default(content);
+                // case 'a': {
+                //   return new LinkParser(content);
+                // }
+                case 'paragraph': {
+                    return new ParagraphParser_1.default(content, 'paragraph');
                 }
                 default: {
-                    return new TextParser_1.default(content, 'p');
+                    return undefined;
                 }
             }
         };

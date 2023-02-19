@@ -1,12 +1,10 @@
 import ContentParser from './index';
 import { BuildingBlock } from '../models';
-import {
-  ParagraphObjectRequest
-} from '../type/blockObjectRequests';
+import { ParagraphObjectRequest } from '../type/blockObjectRequests';
 
-export type Type = NonNullable<BuildingBlock<ParagraphObjectRequest>['type']>
+export type Type = NonNullable<BuildingBlock<ParagraphObjectRequest>['type']>;
 
-type HeadingBuildingBlock = BuildingBlock<ParagraphObjectRequest>
+type HeadingBuildingBlock = BuildingBlock<ParagraphObjectRequest>;
 
 class ParagraphParser extends ContentParser {
   private readonly type: Type;
@@ -16,7 +14,9 @@ class ParagraphParser extends ContentParser {
     this.type = type;
   }
 
-  parse = (buildingBlock: HeadingBuildingBlock): undefined | HeadingBuildingBlock => {
+  parse = (
+    buildingBlock: HeadingBuildingBlock
+  ): undefined | HeadingBuildingBlock => {
     if (buildingBlock.type === undefined) {
       return undefined;
     }
@@ -25,15 +25,15 @@ class ParagraphParser extends ContentParser {
         type: 'paragraph',
         block: {
           paragraph: { rich_text: [] },
-          type: 'paragraph'
-        }
+          type: 'paragraph',
+        },
       };
     }
     buildingBlock.block.paragraph.rich_text.push({
       type: 'text',
       text: {
-        content: this.content
-      }
+        content: this.content,
+      },
     });
     return buildingBlock;
   };
