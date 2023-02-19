@@ -1,9 +1,9 @@
 import ContentParser from './parsers';
 import { BuildingBlock } from './models';
-import { textTagNameToNotionTypeMap } from './notionUtils';
 import { BlockObjectRequestType } from './type/blockObjectRequests';
 import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
+import { textTagNameToNotionTypeMap } from './config';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
@@ -28,7 +28,7 @@ class NotionParser {
     } else {
       this.currentElementsStack = [tagName];
     }
-    this.setLinkAttributesIfExists(attributes);
+    this.buildingBlock.src = attributes.src ?? attributes.href
   };
 
   private preCheckHtmlFormat(tagName: string) {
@@ -37,14 +37,6 @@ class NotionParser {
     }
     if (tagName === 'body') {
       this.isWaitingForBodyElement = false;
-    }
-  }
-
-  private setLinkAttributesIfExists(attributes: { [s: string]: string }) {
-    if (attributes.src) {
-      this.buildingBlock.src = attributes.src;
-    } else if (attributes.href) {
-      this.buildingBlock.src = attributes.href;
     }
   }
 
@@ -67,6 +59,7 @@ class NotionParser {
       }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
+      console.log("parse", this.buildingBlock);
       const buildingBlock = contentParser.parse(this.buildingBlock);
       if (buildingBlock) {
         this.buildingBlock = buildingBlock;
@@ -95,16 +88,12 @@ class NotionParser {
     const tagName = [...this.currentElementsStack].pop();
     if (!tagName) return;
     const blockType = textTagNameToNotionTypeMap.get(tagName);
-    if (!blockType) return;
     switch (blockType) {
       case 'heading_1':
       case 'heading_2':
       case 'heading_3': {
         return new HeadingParser(content, blockType);
       }
-      // case 'a': {
-      //   return new LinkParser(content);
-      // }
       default: {
         return new ParagraphParser(content, 'paragraph');
       }

@@ -4,7 +4,7 @@ const notionBlockTypes = [
   'paragraph',
   'heading_1',
   'heading_2',
-  'heading_3',
+  'heading_3'
 ] satisfies NonNullable<BlockObjectRequestType['type']>[];
 export type NotionBlockType = (typeof notionBlockTypes)[number];
 
@@ -16,4 +16,5 @@ export const textTagNameToNotionTypeMap = new Map<string, NotionBlockType>([
   ['h5', 'heading_3'],
   ['h6', 'heading_3'],
   ['p', 'paragraph'],
+  ['a', 'paragraph']
 ]);

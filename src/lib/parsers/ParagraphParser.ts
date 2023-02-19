@@ -19,6 +19,7 @@ class ParagraphParser extends ContentParser {
   ): ParagraphBuildingBlock => {
     if (!buildingBlock.block) {
       buildingBlock = {
+        ...buildingBlock,
         type: 'paragraph',
         block: {
           paragraph: { rich_text: [] },
@@ -30,7 +31,10 @@ class ParagraphParser extends ContentParser {
     buildingBlock.block?.paragraph.rich_text.push({
       type: 'text',
       text: {
-        content: this.content
+        content: this.content,
+        link: buildingBlock.src ? {
+          url: buildingBlock.src
+        } : null
       }
     });
     return buildingBlock;
