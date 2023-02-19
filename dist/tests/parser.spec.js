@@ -12,19 +12,20 @@ describe('NotionParser', () => {
             {
                 object: 'block',
                 paragraph: {
-                    text: [{ text: { content: 'text content' }, type: 'text' }],
+                    rich_text: [{ text: { content: 'text content' }, type: 'text' }],
+                    link: null
                 },
                 type: 'paragraph',
             },
         ]);
     });
-    it('should parse links', () => {
+    it('should parse links to paragraphs', () => {
         const testHtml = '<a href="https://notion.so">Click here</a>';
         expect((0, parser_1.default)(testHtml)).toStrictEqual([
             {
                 object: 'block',
                 paragraph: {
-                    text: [
+                    rich_text: [
                         {
                             text: {
                                 content: 'Click here',

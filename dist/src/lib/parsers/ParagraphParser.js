@@ -5,23 +5,22 @@ class ParagraphParser extends index_1.default {
     constructor(content, type) {
         super(content);
         this.parse = (buildingBlock) => {
-            if (buildingBlock.type === undefined) {
-                return undefined;
-            }
+            var _a;
             if (!buildingBlock.block) {
-                return {
-                    type: 'paragraph',
-                    block: {
+                buildingBlock = Object.assign(Object.assign({}, buildingBlock), { type: 'paragraph', block: {
                         paragraph: { rich_text: [] },
                         type: 'paragraph',
-                    },
-                };
+                        object: 'block'
+                    } });
             }
-            buildingBlock.block.paragraph.rich_text.push({
+            (_a = buildingBlock.block) === null || _a === void 0 ? void 0 : _a.paragraph.rich_text.push({
                 type: 'text',
                 text: {
                     content: this.content,
-                },
+                    link: buildingBlock.src ? {
+                        url: buildingBlock.src
+                    } : null
+                }
             });
             return buildingBlock;
         };

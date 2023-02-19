@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const notionUtils_1 = require("./notionUtils");
 const HeadingParser_1 = require("./parsers/HeadingParser");
 const ParagraphParser_1 = require("./parsers/ParagraphParser");
+const config_1 = require("./config");
 class NotionParser {
     constructor() {
         this.buildingBlock = {};
@@ -11,7 +11,7 @@ class NotionParser {
         this.isWaitingForBodyElement = false;
         this.getBlocks = () => this.producedBlocks;
         this.onOpenTag = (tagName, attributes) => {
-            var _a;
+            var _a, _b;
             this.preCheckHtmlFormat(tagName);
             if (this.isWaitingForBodyElement)
                 return;
@@ -25,7 +25,7 @@ class NotionParser {
             else {
                 this.currentElementsStack = [tagName];
             }
-            this.setLinkAttributesIfExists(attributes);
+            this.buildingBlock.src = (_b = attributes.src) !== null && _b !== void 0 ? _b : attributes.href;
         };
         this.onText = (content) => {
             if (this.isWaitingForBodyElement)
@@ -45,6 +45,7 @@ class NotionParser {
                 const contentParser = this.initContentParser(cleanContent);
                 if (!contentParser)
                     return;
+                console.log("parse", this.buildingBlock);
                 const buildingBlock = contentParser.parse(this.buildingBlock);
                 if (buildingBlock) {
                     this.buildingBlock = buildingBlock;
@@ -71,23 +72,15 @@ class NotionParser {
             const tagName = [...this.currentElementsStack].pop();
             if (!tagName)
                 return;
-            const blockType = notionUtils_1.textTagNameToNotionTypeMap.get(tagName);
-            if (!blockType)
-                return;
+            const blockType = config_1.tagNameToNotionBlockType[tagName];
             switch (blockType) {
                 case 'heading_1':
                 case 'heading_2':
                 case 'heading_3': {
                     return new HeadingParser_1.default(content, blockType);
                 }
-                // case 'a': {
-                //   return new LinkParser(content);
-                // }
-                case 'paragraph': {
-                    return new ParagraphParser_1.default(content, 'paragraph');
-                }
                 default: {
-                    return undefined;
+                    return new ParagraphParser_1.default(content, 'paragraph');
                 }
             }
         };
@@ -98,14 +91,6 @@ class NotionParser {
         }
         if (tagName === 'body') {
             this.isWaitingForBodyElement = false;
-        }
-    }
-    setLinkAttributesIfExists(attributes) {
-        if (attributes.src) {
-            this.buildingBlock.src = attributes.src;
-        }
-        else if (attributes.href) {
-            this.buildingBlock.src = attributes.href;
         }
     }
 }

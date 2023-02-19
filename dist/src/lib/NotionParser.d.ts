@@ -10,7 +10,6 @@ declare class NotionParser {
         [s: string]: string;
     }) => void;
     private preCheckHtmlFormat;
-    private setLinkAttributesIfExists;
     onText: (content: string) => void;
     onCloseTag: () => void;
     flushBuildingBlock: () => void;
