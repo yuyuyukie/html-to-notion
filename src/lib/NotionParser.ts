@@ -28,7 +28,10 @@ class NotionParser {
     } else {
       this.currentElementsStack = [tagName];
     }
-    this.buildingBlock.src = attributes.src ?? attributes.href
+    const src = attributes.src ?? attributes.href;
+    if(src){
+      this.buildingBlock.src = src
+    }
   };
 
   private preCheckHtmlFormat(tagName: string) {
@@ -86,8 +89,10 @@ class NotionParser {
 
   initContentParser = (content: string): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
+    console.log({ tagName });
     if (!tagName) return;
     const blockType = tagNameToNotionBlockType[tagName];
+    console.log({ blockType });
     switch (blockType) {
       case 'heading_1':
       case 'heading_2':

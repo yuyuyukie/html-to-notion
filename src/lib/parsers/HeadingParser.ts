@@ -24,22 +24,17 @@ class HeadingParser extends ContentParser {
     this.type = type;
   }
 
-  parse = (
-    buildingBlock: HeadingBuildingBlock
-  ): undefined | HeadingBuildingBlock => {
-    if (buildingBlock.type === undefined || this.type !== buildingBlock.type) {
-      return undefined;
-    }
+  private makeBuildingBlock(buildingBlock: HeadingBuildingBlock):HeadingBuildingBlock{
     if (!buildingBlock.block) {
       switch (this.type) {
         case 'heading_1': {
-          return initialHeading1;
+          return initialHeading1(buildingBlock);
         }
         case 'heading_2': {
-          return initialHeading2;
+          return initialHeading2(buildingBlock);
         }
         case 'heading_3': {
-          return initialHeading3;
+          return initialHeading3(buildingBlock);
         }
         default: {
           throw new Error(
@@ -48,14 +43,21 @@ class HeadingParser extends ContentParser {
         }
       }
     }
+    return buildingBlock;
+  }
+
+  parse = (
+    buildingBlock: HeadingBuildingBlock
+  ): undefined | HeadingBuildingBlock => {
+    const newBlock = this.makeBuildingBlock(buildingBlock);
     // utilize flows
     // @ts-ignore
-    const block = buildingBlock.block[buildingBlock.type] as
+    const block = newBlock.block[newBlock.type] as
       | Heading1ObjectRequest['heading_1']
       | undefined;
     if (!block) {
       throw new Error(
-        `Unexpected structure of BuildingBlock. buildingBlock.type: ${buildingBlock.type}`
+        `Unexpected structure of BuildingBlock. buildingBlock.type: ${newBlock.type}`
       );
     }
     block.rich_text.push({
@@ -64,7 +66,8 @@ class HeadingParser extends ContentParser {
         content: this.content,
       },
     });
-    return buildingBlock;
+    console.log({ newBlock });
+    return newBlock;
   };
 }
 

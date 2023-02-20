@@ -11,8 +11,7 @@ describe('NotionParser', () => {
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
-          link: null
+          rich_text: [{ text: { content: 'text content', link:null }, type: 'text' }],
         },
         type: 'paragraph',
       },
@@ -49,42 +48,42 @@ describe('NotionParser', () => {
       {
         object: 'block',
         heading_1: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_1',
       },
       {
         object: 'block',
         heading_2: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_2',
       },
       {
         object: 'block',
         heading_3: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_3',
       },
       {
         object: 'block',
         heading_3: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_3',
       },
       {
         object: 'block',
         heading_3: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_3',
       },
       {
         object: 'block',
         heading_3: {
-          text: [{ text: { content: 'text content' }, type: 'text' }],
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }],
         },
         type: 'heading_3',
       },
