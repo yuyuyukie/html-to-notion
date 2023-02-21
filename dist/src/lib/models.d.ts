@@ -4,6 +4,6 @@ export type BuildingBlock<T extends BlockObjectRequestType = BlockObjectRequestT
     type?: T['type'];
     src?: string;
 };
-export declare const initialHeading1: BuildingBlock<Heading1ObjectRequest>;
-export declare const initialHeading2: BuildingBlock<Heading2ObjectRequest>;
-export declare const initialHeading3: BuildingBlock<Heading3ObjectRequest>;
+export declare const initialHeading1: (buildingBlock?: BuildingBlock) => BuildingBlock<Heading1ObjectRequest>;
+export declare const initialHeading2: (buildingBlock?: BuildingBlock) => BuildingBlock<Heading2ObjectRequest>;
+export declare const initialHeading3: (buildingBlock?: BuildingBlock) => BuildingBlock<Heading3ObjectRequest>;

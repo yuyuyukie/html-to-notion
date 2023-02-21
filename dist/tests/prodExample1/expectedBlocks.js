@@ -7,7 +7,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'FS | BRAIN FOOD'
+                        content: 'FS | BRAIN FOOD', link: null
                     },
                     type: 'text'
                 }
@@ -21,21 +21,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Hey ...'
-                    },
-                    type: 'text'
-                }
-            ]
-        },
-        type: 'paragraph'
-    },
-    {
-        object: 'block',
-        paragraph: {
-            text: [
-                {
-                    text: {
-                        content: 'Sunday Brain Food: a weekly newsletter full of timeless ideas and insights for life and business.'
+                        content: 'Hey ...', link: null
                     },
                     type: 'text'
                 }
@@ -49,7 +35,22 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '(Was this newsletter forwarded to you?'
+                        content: 'Sunday Brain Food: a weekly newsletter full of timeless ideas and insights for life and business.',
+                        link: null
+                    },
+                    type: 'text'
+                }
+            ]
+        },
+        type: 'paragraph'
+    },
+    {
+        object: 'block',
+        paragraph: {
+            rich_text: [
+                {
+                    text: {
+                        content: '(Was this newsletter forwarded to you?', link: null
                     },
                     type: 'text'
                 },
@@ -64,7 +65,7 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' .)'
+                        content: ' .)', link: null
                     },
                     type: 'text'
                 }
@@ -78,7 +79,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'FS'
+                        content: 'FS', link: null
                     },
                     type: 'text'
                 }
@@ -92,7 +93,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '"For the first three months, I place each student at a table with a thousand pieces of white paper and a trash can underneath. Every day they have to sit at the table for several hours and write ideas. They put the ideas they like on the right side of the table; the ones they don’t like, they put in the trash. But we don’t throw out the trash. After three months, I only take the ideas from the trash can. I don’t even look at the ideas they liked. Because the trash can is a treasure trove of things they’re afraid to do."'
+                        content: '"For the first three months, I place each student at a table with a thousand pieces of white paper and a trash can underneath. Every day they have to sit at the table for several hours and write ideas. They put the ideas they like on the right side of the table; the ones they don’t like, they put in the trash. But we don’t throw out the trash. After three months, I only take the ideas from the trash can. I don’t even look at the ideas they liked. Because the trash can is a treasure trove of things they’re afraid to do."',
+                        link: null
                     },
                     type: 'text'
                 }
@@ -106,7 +108,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '—'
+                        content: '—', link: null
                     },
                     type: 'text'
                 },
@@ -129,7 +131,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Explore Your Curiosity'
+                        content: 'Explore Your Curiosity', link: null
                     },
                     type: 'text'
                 }
@@ -143,7 +145,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '★ "You\'d imagine you were seeing a specific red, not projected on the screen but as a neurophysiological response to stimulus. And if you pick the precise wavelength, “you could actually cause someone to perceive a color that they could never otherwise see. Like, there\'s no natural way for you to have the perception of that color.” That color wouldn\'t be onscreen. It wouldn\'t be anything a projector could cast or a computer could generate. It\'d be a function of pure cognition, different for every viewer, existing only in the mind, then fading to nothingness. Which is true for all colors anyway, when you think about it."'
+                        content: '★ "You\'d imagine you were seeing a specific red, not projected on the screen but as a neurophysiological response to stimulus. And if you pick the precise wavelength, “you could actually cause someone to perceive a color that they could never otherwise see. Like, there\'s no natural way for you to have the perception of that color.” That color wouldn\'t be onscreen. It wouldn\'t be anything a projector could cast or a computer could generate. It\'d be a function of pure cognition, different for every viewer, existing only in the mind, then fading to nothingness. Which is true for all colors anyway, when you think about it."',
+                        link: null
                     },
                     type: 'text'
                 }
@@ -157,7 +160,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '—'
+                        content: '—', link: null
                     },
                     type: 'text'
                 },
@@ -180,7 +183,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '★ “Scientists who study the mechanics of curiosity are finding that it is, at its core, a kind of probability algorithm—our brain’s continuous calculation of which path or action is likely to gain us the most knowledge in the least amount of time. Like the links on a Wikipedia page, curiosity builds upon itself, every question leading to the next. And as with a journey down the Wikipedia wormhole, where you start dictates where you might end up. That’s the funny thing about curiosity: It’s less about what you don’t know than about what you already do.”'
+                        content: '★ “Scientists who study the mechanics of curiosity are finding that it is, at its core, a kind of probability algorithm—our brain’s continuous calculation of which path or action is likely to gain us the most knowledge in the least amount of time. Like the links on a Wikipedia page, curiosity builds upon itself, every question leading to the next. And as with a journey down the Wikipedia wormhole, where you start dictates where you might end up. That’s the funny thing about curiosity: It’s less about what you don’t know than about what you already do.”',
+                        link: null
                     },
                     type: 'text'
                 }
@@ -194,7 +198,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '—'
+                        content: '—', link: null
                     },
                     type: 'text'
                 },
@@ -217,7 +221,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '(In many ways reading is similar. Your reading ability depends on what you already know. The key to reading faster or remembering more is often as simple as reading more. Learn more about'
+                        content: '(In many ways reading is similar. Your reading ability depends on what you already know. The key to reading faster or remembering more is often as simple as reading more. Learn more about',
+                        link: null
                     },
                     type: 'text'
                 },
@@ -232,7 +237,7 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' .)'
+                        content: ' .)', link: null
                     },
                     type: 'text'
                 }
@@ -246,7 +251,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Timeless Insight'
+                        content: 'Timeless Insight', link: null
                     },
                     type: 'text'
                 }
@@ -260,7 +265,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '“It is not the amount of knowledge that makes a brain. It is not even the distribution of knowledge. It is the interconnectedness."'
+                        content: '“It is not the amount of knowledge that makes a brain. It is not even the distribution of knowledge. It is the interconnectedness."',
+                        link: null
                     },
                     type: 'text'
                 }
@@ -274,7 +280,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '— Howard Bloom'
+                        content: '— Howard Bloom', link: null
                     },
                     type: 'text'
                 }
@@ -288,7 +294,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Tiny Thought'
+                        content: 'Tiny Thought', link: null
                     },
                     type: 'text'
                 }
@@ -302,7 +308,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Three stages of thinking:'
+                        content: 'Three stages of thinking:', link: null
                     },
                     type: 'text'
                 }
@@ -316,7 +322,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '1. Too simplistic (it\'s easy).'
+                        content: '1. Too simplistic (it\'s easy).', link: null
                     },
                     type: 'text'
                 }
@@ -330,7 +336,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '2. Too complicated (it\'s hard).'
+                        content: '2. Too complicated (it\'s hard).', link: null
                     },
                     type: 'text'
                 }
@@ -344,7 +350,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '3. Simple (it\'s simple but not easy).'
+                        content: '3. Simple (it\'s simple but not easy).', link: null
                     },
                     type: 'text'
                 }
@@ -358,7 +364,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'We tend to avoid the hard work necessary to make it simple.'
+                        content: 'We tend to avoid the hard work necessary to make it simple.', link: null
                     },
                     type: 'text'
                 }
@@ -372,7 +378,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Sponsored by Trends'
+                        content: 'Sponsored by Trends', link: null
                     },
                     type: 'text'
                 }
@@ -403,7 +409,8 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'is where entrepreneurs and investors find the next big thing. Every week, their team of analysts send a detailed report on markets that are about to explode, and exactly how you can capitalize. Uncover 1,000+ emerging market trends by visiting'
+                        content: 'is where entrepreneurs and investors find the next big thing. Every week, their team of analysts send a detailed report on markets that are about to explode, and exactly how you can capitalize. Uncover 1,000+ emerging market trends by visiting',
+                        link: null
                     },
                     type: 'text'
                 },
@@ -426,7 +433,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'to try your first 7 days for free.'
+                        content: 'to try your first 7 days for free.', link: null
                     },
                     type: 'text'
                 }
@@ -440,7 +447,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Stay safe,'
+                        content: 'Stay safe,', link: null
                     },
                     type: 'text'
                 }
@@ -454,7 +461,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Shane'
+                        content: 'Shane', link: null
                     },
                     type: 'text'
                 }
@@ -468,7 +475,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'P.S. The'
+                        content: 'P.S. The', link: null
                     },
                     type: 'text'
                 },
@@ -483,7 +490,8 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' is on sale at Amazon.com for the lowest price ever. (Please note we don\'t control pricing and have no idea how long it will last.)'
+                        content: ' is on sale at Amazon.com for the lowest price ever. (Please note we don\'t control pricing and have no idea how long it will last.)',
+                        link: null
                     },
                     type: 'text'
                 }
@@ -497,7 +505,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: 'Overwhelmed by email? No need to unsubscribe.'
+                        content: 'Overwhelmed by email? No need to unsubscribe.', link: null
                     },
                     type: 'text'
                 },
@@ -512,7 +520,7 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' . You won\'t get any emails from us for 30 days.'
+                        content: ' . You won\'t get any emails from us for 30 days.', link: null
                     },
                     type: 'text'
                 },
@@ -527,7 +535,7 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' to change your email address or'
+                        content: ' to change your email address or', link: null
                     },
                     type: 'text'
                 },
@@ -542,7 +550,7 @@ const expectedBlocks = [
                 },
                 {
                     text: {
-                        content: ' .'
+                        content: ' .', link: null
                     },
                     type: 'text'
                 }
@@ -556,7 +564,7 @@ const expectedBlocks = [
             rich_text: [
                 {
                     text: {
-                        content: '201-854 Bank Street, Ottawa, ON K1S 3W3'
+                        content: '201-854 Bank Street, Ottawa, ON K1S 3W3', link: null
                     },
                     type: 'text'
                 }

@@ -25,7 +25,10 @@ class NotionParser {
             else {
                 this.currentElementsStack = [tagName];
             }
-            this.buildingBlock.src = (_b = attributes.src) !== null && _b !== void 0 ? _b : attributes.href;
+            const src = (_b = attributes.src) !== null && _b !== void 0 ? _b : attributes.href;
+            if (src) {
+                this.buildingBlock.src = src;
+            }
         };
         this.onText = (content) => {
             if (this.isWaitingForBodyElement)
@@ -70,9 +73,11 @@ class NotionParser {
         };
         this.initContentParser = (content) => {
             const tagName = [...this.currentElementsStack].pop();
+            console.log({ tagName });
             if (!tagName)
                 return;
             const blockType = config_1.tagNameToNotionBlockType[tagName];
+            console.log({ blockType });
             switch (blockType) {
                 case 'heading_1':
                 case 'heading_2':

@@ -6,40 +6,45 @@ class HeadingParser extends _1.default {
     constructor(content, type) {
         super(content);
         this.parse = (buildingBlock) => {
-            if (buildingBlock.type === undefined || this.type !== buildingBlock.type) {
-                return undefined;
-            }
-            if (!buildingBlock.block) {
-                switch (this.type) {
-                    case 'heading_1': {
-                        return models_1.initialHeading1;
-                    }
-                    case 'heading_2': {
-                        return models_1.initialHeading2;
-                    }
-                    case 'heading_3': {
-                        return models_1.initialHeading3;
-                    }
-                    default: {
-                        throw new Error(`Unexpected block type appeared. this.type: ${this.type}`);
-                    }
-                }
-            }
+            const newBlock = this.makeBuildingBlock(buildingBlock);
             // utilize flows
             // @ts-ignore
-            const block = buildingBlock.block[buildingBlock.type];
+            const block = newBlock.block[newBlock.type];
             if (!block) {
-                throw new Error(`Unexpected structure of BuildingBlock. buildingBlock.type: ${buildingBlock.type}`);
+                throw new Error(`Unexpected structure of BuildingBlock. buildingBlock.type: ${newBlock.type}`);
             }
             block.rich_text.push({
                 type: 'text',
                 text: {
                     content: this.content,
+                    link: buildingBlock.src ? {
+                        url: buildingBlock.src
+                    } : null
                 },
             });
-            return buildingBlock;
+            console.log({ newBlock });
+            return newBlock;
         };
         this.type = type;
+    }
+    makeBuildingBlock(buildingBlock) {
+        if (!buildingBlock.block) {
+            switch (this.type) {
+                case 'heading_1': {
+                    return (0, models_1.initialHeading1)(buildingBlock);
+                }
+                case 'heading_2': {
+                    return (0, models_1.initialHeading2)(buildingBlock);
+                }
+                case 'heading_3': {
+                    return (0, models_1.initialHeading3)(buildingBlock);
+                }
+                default: {
+                    throw new Error(`Unexpected block type appeared. this.type: ${this.type}`);
+                }
+            }
+        }
+        return buildingBlock;
     }
 }
 exports.default = HeadingParser;

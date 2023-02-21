@@ -6,6 +6,7 @@ type Type = NonNullable<HeadingBuildingBlock['type']>;
 declare class HeadingParser extends ContentParser {
     private readonly type;
     constructor(content: string, type: Type);
+    private makeBuildingBlock;
     parse: (buildingBlock: HeadingBuildingBlock) => undefined | HeadingBuildingBlock;
 }
 export default HeadingParser;
