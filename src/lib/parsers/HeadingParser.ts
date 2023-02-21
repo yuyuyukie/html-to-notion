@@ -60,10 +60,14 @@ class HeadingParser extends ContentParser {
         `Unexpected structure of BuildingBlock. buildingBlock.type: ${newBlock.type}`
       );
     }
+
     block.rich_text.push({
       type: 'text',
       text: {
         content: this.content,
+        link: buildingBlock.src ? {
+          url: buildingBlock.src
+        } : null
       },
     });
     console.log({ newBlock });
