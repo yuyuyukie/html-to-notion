@@ -1,6 +1,6 @@
-import { Block } from '@notionhq/client/build/src/api-types';
 import { Parser } from 'htmlparser2';
 import NotionParser from './NotionParser';
+import { BlockObjectRequestType } from './type/blockObjectRequests';
 
 const initParser = (notionParser: NotionParser) =>
   new Parser({
@@ -15,7 +15,7 @@ const initParser = (notionParser: NotionParser) =>
     },
   });
 
-const parseHtmlToNotionBlocks = (html: string): Block[] => {
+const parseHtmlToNotionBlocks = (html: string): BlockObjectRequestType[] => {
   const notionParser = new NotionParser();
   const parser = initParser(notionParser);
   parser.write(html);
