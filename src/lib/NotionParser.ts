@@ -62,7 +62,6 @@ class NotionParser {
       }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
-      console.log("parse", this.buildingBlock);
       const buildingBlock = contentParser.parse(this.buildingBlock);
       if (buildingBlock) {
         this.buildingBlock = buildingBlock;
@@ -89,10 +88,8 @@ class NotionParser {
 
   initContentParser = (content: string): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
-    console.log({ tagName });
     if (!tagName) return;
     const blockType = tagNameToNotionBlockType[tagName];
-    console.log({ blockType });
     switch (blockType) {
       case 'heading_1':
       case 'heading_2':
