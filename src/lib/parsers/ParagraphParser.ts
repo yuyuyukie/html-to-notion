@@ -32,9 +32,6 @@ class ParagraphParser extends ContentParser {
       type: 'text',
       text: {
         content: this.content,
-        link: buildingBlock.src ? {
-          url: buildingBlock.src
-        } : null
       }
     });
     return buildingBlock;

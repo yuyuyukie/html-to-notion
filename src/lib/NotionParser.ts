@@ -28,10 +28,6 @@ class NotionParser {
     } else {
       this.currentElementsStack = [tagName];
     }
-    const src = attributes.src ?? attributes.href;
-    if(src){
-      this.buildingBlock.src = src
-    }
   };
 
   private preCheckHtmlFormat(tagName: string) {

@@ -11,7 +11,7 @@ describe('NotionParser', () => {
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'paragraph'
       }
@@ -28,9 +28,6 @@ describe('NotionParser', () => {
             {
               text: {
                 content: 'Click here',
-                link: {
-                  url: 'https://notion.so'
-                }
               },
               type: 'text'
             }
@@ -48,42 +45,42 @@ describe('NotionParser', () => {
       {
         object: 'block',
         heading_1: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_1'
       },
       {
         object: 'block',
         heading_2: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_2'
       },
       {
         object: 'block',
         heading_3: {
-          rich_text: [{ text: { content: 'text content' , link: null}, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_3'
       },
       {
         object: 'block',
         heading_3: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_3'
       },
       {
         object: 'block',
         heading_3: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_3'
       },
       {
         object: 'block',
         heading_3: {
-          rich_text: [{ text: { content: 'text content', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text content' }, type: 'text' }]
         },
         type: 'heading_3'
       }
@@ -99,10 +96,10 @@ describe('NotionParser', () => {
         object: 'block',
         paragraph: {
           rich_text: [
-            { text: { content: 'text1', link: null }, type: 'text' },
-            { text: { content: ' text2', link: null }, type: 'text' },
-            { text: { content: ' text3', link: null }, type: 'text' },
-            { text: { content: ' text4', link: null }, type: 'text' }
+            { text: { content: 'text1' }, type: 'text' },
+            { text: { content: ' text2' }, type: 'text' },
+            { text: { content: ' text3' }, type: 'text' },
+            { text: { content: ' text4' }, type: 'text' }
           ]
         },
         type: 'paragraph'
@@ -116,35 +113,35 @@ describe('NotionParser', () => {
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'text1', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text1' }, type: 'text' }]
         },
         type: 'paragraph'
       },
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'text2', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text2' }, type: 'text' }]
         },
         type: 'paragraph'
       },
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'text3', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'text3' }, type: 'text' }]
         },
         type: 'paragraph'
       }
     ]);
   });
 
-  xit('should parse multiple elements type', () => {
+  it('should parse multiple elements type', () => {
     const testHtml =
       '<div><h1>Title</h1><p>text <a href="https://notion.so">link</a> text42.</p><p>Another text</p></div>';
     expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
       {
         object: 'block',
         heading_1: {
-          rich_text: [{ text: { content: 'Title', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'Title' }, type: 'text' }]
         },
         type: 'heading_1'
       },
@@ -152,17 +149,14 @@ describe('NotionParser', () => {
         object: 'block',
         paragraph: {
           rich_text: [
-            { text: { content: 'text', link: null }, type: 'text' },
+            { text: { content: 'text' }, type: 'text' },
             {
               text: {
                 content: ' link',
-                link: {
-                  url: 'https://notion.so'
-                }
               },
               type: 'text'
             },
-            { text: { content: ' text42.', link: null }, type: 'text' }
+            { text: { content: ' text42.' }, type: 'text' }
           ]
         },
         type: 'paragraph'
@@ -170,7 +164,7 @@ describe('NotionParser', () => {
       {
         object: 'block',
         paragraph: {
-          rich_text: [{ text: { content: 'Another text', link: null }, type: 'text' }]
+          rich_text: [{ text: { content: 'Another text' }, type: 'text' }]
         },
         type: 'paragraph'
       }

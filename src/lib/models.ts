@@ -10,7 +10,6 @@ export type BuildingBlock<
 > = {
   block?: Extract<BlockObjectRequestType, T>;
   type?: T['type'];
-  src?: string;
 };
 
 export const initialHeading1 = (buildingBlock?: BuildingBlock): BuildingBlock<Heading1ObjectRequest> => ({
