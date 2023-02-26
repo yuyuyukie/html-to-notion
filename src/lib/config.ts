@@ -8,7 +8,7 @@ const notionBlockTypes = [
 ] satisfies NonNullable<BlockObjectRequestType['type']>[];
 export type NotionBlockType = (typeof notionBlockTypes)[number];
 
-export const tagNameToNotionBlockType:{
+export const tagNameToNotionBlockType: {
   [p: string]: NotionBlockType
 } = {
   h1: 'heading_1',
@@ -18,5 +18,6 @@ export const tagNameToNotionBlockType:{
   h5: 'heading_3',
   h6: 'heading_3',
   p: 'paragraph',
-  a: 'paragraph'
+  a: 'paragraph',
+  div: 'paragraph'
 } as const;

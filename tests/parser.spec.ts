@@ -3,9 +3,26 @@ import rawHtmlOne from './prodExample1/rawHtml';
 import expectedBlocksOne from './prodExample1/expectedBlocks';
 import rawHtmlTwo from './prodExample2/rawHtml';
 import expectedBlocksTwo from './prodExample2/expectedBlocks';
+import { BlockObjectRequestType } from '../dist/src/lib/type/blockObjectRequests';
 
 describe('NotionParser', () => {
-  describe('e2e', () => {
+  describe('blocks', () => {
+    it('should parse divs', () => {
+      const testHtml = '<div>div text </div>';
+      expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+        {
+          type: 'paragraph',
+          object: 'block',
+          paragraph: {
+            rich_text: [{
+              type: 'text', text: {
+                content: 'div text'
+              }
+            }]
+          }
+        }
+      ]satisfies BlockObjectRequestType[]);
+    });
     it('should parse paragraphs', () => {
       const testHtml = '<p>text content</p>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
@@ -28,7 +45,7 @@ describe('NotionParser', () => {
             rich_text: [
               {
                 text: {
-                  content: 'Click here',
+                  content: 'Click here'
                 },
                 type: 'text'
               }
@@ -153,7 +170,7 @@ describe('NotionParser', () => {
               { text: { content: 'text' }, type: 'text' },
               {
                 text: {
-                  content: ' link',
+                  content: ' link'
                 },
                 type: 'text'
               },
