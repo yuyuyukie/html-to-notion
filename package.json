@@ -17,7 +17,6 @@
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix",
     "test": "run-s build test:*",
-    "test:type": "tsc --noEmit -p tsconfig.json",
     "test:lint": "eslint src --ext .ts",
     "test:unit": "jest",
     "watch:build": "tsc -p tsconfig.json -w",
