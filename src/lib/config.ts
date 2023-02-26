@@ -18,6 +18,5 @@ export const tagNameToNotionBlockType: {
   h5: 'heading_3',
   h6: 'heading_3',
   p: 'paragraph',
-  a: 'paragraph',
   div: 'paragraph'
 } as const;
