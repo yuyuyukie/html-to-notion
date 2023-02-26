@@ -17,9 +17,6 @@ class ParagraphParser extends index_1.default {
                 type: 'text',
                 text: {
                     content: this.content,
-                    link: buildingBlock.src ? {
-                        url: buildingBlock.src
-                    } : null
                 }
             });
             return buildingBlock;

@@ -9,9 +9,10 @@ class NotionParser {
         this.producedBlocks = [];
         this.currentElementsStack = [];
         this.isWaitingForBodyElement = false;
-        this.getBlocks = () => this.producedBlocks;
+        this.getBlocks = () => this.producedBlocks.map(value => value.block).filter((value) => !!value);
         this.onOpenTag = (tagName, attributes) => {
-            var _a, _b;
+            var _a;
+            console.log(attributes);
             this.preCheckHtmlFormat(tagName);
             if (this.isWaitingForBodyElement)
                 return;
@@ -24,10 +25,6 @@ class NotionParser {
             }
             else {
                 this.currentElementsStack = [tagName];
-            }
-            const src = (_b = attributes.src) !== null && _b !== void 0 ? _b : attributes.href;
-            if (src) {
-                this.buildingBlock.src = src;
             }
         };
         this.onText = (content) => {
@@ -48,7 +45,6 @@ class NotionParser {
                 const contentParser = this.initContentParser(cleanContent);
                 if (!contentParser)
                     return;
-                console.log("parse", this.buildingBlock);
                 const buildingBlock = contentParser.parse(this.buildingBlock);
                 if (buildingBlock) {
                     this.buildingBlock = buildingBlock;
@@ -60,7 +56,7 @@ class NotionParser {
             if (this.isWaitingForBodyElement)
                 return;
             if (((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block) && this.currentElementsStack.length === 1) {
-                this.producedBlocks.push(this.buildingBlock.block);
+                this.producedBlocks.push(this.buildingBlock);
                 this.flushBuildingBlock();
             }
             this.currentElementsStack.splice(-1, 1);
@@ -73,11 +69,9 @@ class NotionParser {
         };
         this.initContentParser = (content) => {
             const tagName = [...this.currentElementsStack].pop();
-            console.log({ tagName });
             if (!tagName)
                 return;
             const blockType = config_1.tagNameToNotionBlockType[tagName];
-            console.log({ blockType });
             switch (blockType) {
                 case 'heading_1':
                 case 'heading_2':
