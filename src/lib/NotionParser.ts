@@ -21,7 +21,9 @@ class NotionParser {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
-      if (tagName === 'br') {
+      const isBlock = !!tagNameToNotionBlockType[tagName]
+      // if block were nested, flush buildingBlock to flat blocks
+      if (tagName === 'br' || isBlock) {
         this.producedBlocks.push(this.buildingBlock);
         this.flushBuildingBlock();
       }
@@ -68,7 +70,8 @@ class NotionParser {
 
   onCloseTag = (): void => {
     if (this.isWaitingForBodyElement) return;
-    if (this.buildingBlock?.block && this.currentElementsStack.length === 1) {
+    // this.currentElementsStack.length === 1
+    if (this.buildingBlock?.block) {
       this.producedBlocks.push(this.buildingBlock);
       this.flushBuildingBlock();
     }

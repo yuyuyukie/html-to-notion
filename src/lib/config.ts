@@ -8,6 +8,7 @@ const notionBlockTypes = [
 ] satisfies NonNullable<BlockObjectRequestType['type']>[];
 export type NotionBlockType = (typeof notionBlockTypes)[number];
 
+// TODO add annotation mapper separately
 export const tagNameToNotionBlockType: {
   [p: string]: NotionBlockType
 } = {
