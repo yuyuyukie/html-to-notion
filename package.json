@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "run-s build && node dist/examples/parseAndSendToNotion",
-    "build": "eslint src --ext .ts && tsc -p tsconfig.json",
+    "build": "eslint src --ext .ts && rm -rf dist && tsc -p tsconfig.json",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix",

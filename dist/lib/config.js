@@ -7,6 +7,7 @@ const notionBlockTypes = [
     'heading_2',
     'heading_3'
 ];
+// TODO add annotation mapper separately
 exports.tagNameToNotionBlockType = {
     h1: 'heading_1',
     h2: 'heading_2',
@@ -15,5 +16,5 @@ exports.tagNameToNotionBlockType = {
     h5: 'heading_3',
     h6: 'heading_3',
     p: 'paragraph',
-    a: 'paragraph'
+    div: 'paragraph'
 };

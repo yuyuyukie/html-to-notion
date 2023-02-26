@@ -12,5 +12,5 @@
     // show full types when hover over the type error
     "noErrorTruncation": true
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": ["src/**/*"]
 }

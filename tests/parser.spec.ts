@@ -3,7 +3,7 @@ import rawHtmlOne from './prodExample1/rawHtml';
 import expectedBlocksOne from './prodExample1/expectedBlocks';
 import rawHtmlTwo from './prodExample2/rawHtml';
 import expectedBlocksTwo from './prodExample2/expectedBlocks';
-import { BlockObjectRequestType } from '../dist/src/lib/type/blockObjectRequests';
+import { BlockObjectRequestType } from '../src/lib/type/blockObjectRequests';
 
 describe('NotionParser', () => {
   describe('compound blocks', () => {
