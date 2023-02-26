@@ -4,6 +4,7 @@ import { BlockObjectRequestType } from './type/blockObjectRequests';
 import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
 import { tagNameToNotionBlockType } from './config';
+import { RichTextItemRequest } from './type/redefinitions';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
@@ -14,10 +15,10 @@ class NotionParser {
 
   private isWaitingForBodyElement: boolean = false;
 
-  private pushToProducedBlocks = ():void => {
+  private pushToProducedBlocks = (): void => {
     this.producedBlocks.push(this.buildingBlock);
     this.flushBuildingBlock();
-  }
+  };
 
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
@@ -26,10 +27,20 @@ class NotionParser {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
-      const isBlock = !!tagNameToNotionBlockType[tagName]
+      const isBlock = !!tagNameToNotionBlockType[tagName];
       // if block were nested, flush buildingBlock to flat blocks
-      if (tagName === 'br' || isBlock) {
+      if (isBlock) {
         this.pushToProducedBlocks();
+      }
+      // if a br tag appears, add line break to current rich_text
+      if (tagName === 'br' && this.buildingBlock.type) {
+        // @ts-ignore
+        this.buildingBlock.block[this.buildingBlock.type]?.rich_text.push({
+          type: 'text',
+          text: {
+            content: '\n'
+          }
+        } satisfies RichTextItemRequest);
       }
       this.currentElementsStack.push(tagName);
     } else {
@@ -71,9 +82,9 @@ class NotionParser {
     }
   };
 
-  onCloseTag = (): void => {
+  onCloseTag = (tagName: string): void => {
     if (this.isWaitingForBodyElement) return;
-    if (this.buildingBlock?.block) {
+    if (this.buildingBlock?.block && tagNameToNotionBlockType[tagName] === this.buildingBlock.type) {
       this.pushToProducedBlocks();
     }
     this.currentElementsStack.pop();

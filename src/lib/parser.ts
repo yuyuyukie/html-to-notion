@@ -10,8 +10,8 @@ const initParser = (notionParser: NotionParser) =>
     ontext(content) {
       notionParser.onText(content);
     },
-    onclosetag() {
-      notionParser.onCloseTag();
+    onclosetag(tagName) {
+      notionParser.onCloseTag(tagName);
     },
   });
 

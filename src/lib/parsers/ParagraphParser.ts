@@ -28,12 +28,15 @@ class ParagraphParser extends ContentParser {
         }
       };
     }
-    buildingBlock.block?.paragraph.rich_text.push({
-      type: 'text',
-      text: {
-        content: this.content,
-      }
-    });
+
+    if(buildingBlock.block?.paragraph.rich_text) {
+      buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text, {
+        type: 'text',
+        text: {
+          content: this.content
+        }
+      });
+    }
     return buildingBlock;
   };
 }

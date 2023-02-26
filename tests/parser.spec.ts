@@ -8,19 +8,7 @@ import { BlockObjectRequestType } from '../src/lib/type/blockObjectRequests';
 describe('NotionParser', () => {
   describe('compound blocks', () => {
     it('should parse nested tags to flat blocks', () => {
-      const testHtml = "<div>content1<p>content2</p>content3</div>"
-      /**
-       * onOpen div [div]
-       * onText -> add text to div
-       * onOpen p [div, p]
-       *  => push buildingBlock to producedBlocks to flush buildingBlock
-       * onText -> add text to p
-       * onClose p [div]
-       *  => push buildingBlock to producedBlocks to flush buildingBlock
-       * onText -> add text to div
-       *  =>
-       * onClose div
-       */
+      const testHtml = '<div>content1<p>content2</p>content3</div>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
         {
           object: 'block',
@@ -42,8 +30,8 @@ describe('NotionParser', () => {
             rich_text: [{ text: { content: 'content3' }, type: 'text' }]
           },
           type: 'paragraph'
-        },
-      ] satisfies BlockObjectRequestType[])
+        }
+      ] satisfies BlockObjectRequestType[]);
     });
     it('should parse a multiple paragraph blocks', () => {
       const testHtml = '<div><p>text1</p><p>text2</p><div>text3</div></div>';
@@ -87,7 +75,7 @@ describe('NotionParser', () => {
           object: 'block',
           paragraph: {
             rich_text: [
-              { text: { content: 'text text42.' }, type: 'text' },
+              { text: { content: 'text text42.' }, type: 'text' }
             ]
           },
           type: 'paragraph'
@@ -124,6 +112,30 @@ describe('NotionParser', () => {
     });
   });
   describe('simple blocks', () => {
+    describe('br', () => {
+      it('should add a line break and push them to rich_text array if br tag appears', () => {
+        const testHtml = '<p>Hello<br/>World</p>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            type: 'paragraph',
+            object: 'block',
+            paragraph: {
+              rich_text: [{
+                type: 'text',
+                text: {
+                  content: 'Hello'
+                }
+              }, {
+                type: 'text',
+                text: {
+                  content: '\n World'
+                }
+              }]
+            }
+          }
+        ] satisfies BlockObjectRequestType[]);
+      });
+    });
     it('should parse divs', () => {
       const testHtml = '<div>div text </div>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
