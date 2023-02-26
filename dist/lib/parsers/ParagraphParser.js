@@ -13,12 +13,14 @@ class ParagraphParser extends index_1.default {
                         object: 'block'
                     } });
             }
-            (_a = buildingBlock.block) === null || _a === void 0 ? void 0 : _a.paragraph.rich_text.push({
-                type: 'text',
-                text: {
-                    content: this.content,
-                }
-            });
+            if (buildingBlock.block) {
+                buildingBlock.block.paragraph.rich_text = this.addRichText((_a = buildingBlock.block.paragraph.rich_text) !== null && _a !== void 0 ? _a : [], {
+                    type: 'text',
+                    text: {
+                        content: this.content
+                    }
+                });
+            }
             return buildingBlock;
         };
         this.type = type;

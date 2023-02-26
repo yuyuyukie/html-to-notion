@@ -4,14 +4,14 @@ import { BlockObjectRequestType } from './type/blockObjectRequests';
 
 const initParser = (notionParser: NotionParser) =>
   new Parser({
-    onopentag(tagName, attributes) {
-      notionParser.onOpenTag(tagName, attributes);
+    onopentag(tagName) {
+      notionParser.onOpenTag(tagName);
     },
     ontext(content) {
       notionParser.onText(content);
     },
-    onclosetag() {
-      notionParser.onCloseTag();
+    onclosetag(tagName) {
+      notionParser.onCloseTag(tagName);
     },
   });
 

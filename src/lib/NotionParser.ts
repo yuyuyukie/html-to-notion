@@ -4,6 +4,7 @@ import { BlockObjectRequestType } from './type/blockObjectRequests';
 import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
 import { tagNameToNotionBlockType } from './config';
+import { RichTextItemRequest } from './type/redefinitions';
 
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
@@ -12,29 +13,42 @@ class NotionParser {
 
   private currentElementsStack: string[] = [];
 
+  private lastElement: string | undefined = undefined;
+
   private isWaitingForBodyElement: boolean = false;
 
-  private pushToProducedBlocks = ():void => {
+  private pushToProducedBlocks = (): void => {
     this.producedBlocks.push(this.buildingBlock);
     this.flushBuildingBlock();
-  }
+  };
 
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
-  onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
-    console.log(attributes);
+  onOpenTag = (tagName: string): void => {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
-      const isBlock = !!tagNameToNotionBlockType[tagName]
+      const isBlock = !!tagNameToNotionBlockType[tagName];
       // if block were nested, flush buildingBlock to flat blocks
-      if (tagName === 'br' || isBlock) {
+      if (isBlock) {
         this.pushToProducedBlocks();
       }
-      this.currentElementsStack.push(tagName);
-    } else {
-      this.currentElementsStack = [tagName];
+      // if a br tag appears, add line break to current rich_text
+      if (tagName === 'br' && this.buildingBlock.type && this.lastElement !== 'br') {
+        // @ts-ignore
+        const richText = this.buildingBlock.block[this.buildingBlock.type]?.rich_text as RichTextItemRequest[] | undefined;
+        if (richText?.length) {
+          richText.push({
+            type: 'text',
+            text: {
+              content: '\n'
+            }
+          } satisfies RichTextItemRequest);
+        }
+      }
     }
+    this.currentElementsStack.push(tagName);
+    this.lastElement = tagName;
   };
 
   private preCheckHtmlFormat(tagName: string) {
@@ -48,8 +62,9 @@ class NotionParser {
 
   onText = (content: string): void => {
     if (this.isWaitingForBodyElement) return;
-    const currentBlockHasText =
-      this.buildingBlock.block && this.currentElementsStack.length > 0;
+    // for annotation
+    // const currentBlockHasText =
+    //   this.buildingBlock.block && this.currentElementsStack.length > 0;
 
     // matches tabs, newlines, more than 2 spaces and
     // unicode zero-width characters (https://stackoverflow.com/a/11305926/5654715)
@@ -59,9 +74,6 @@ class NotionParser {
       .trim();
 
     if (cleanContent) {
-      if (currentBlockHasText) {
-        cleanContent = ` ${cleanContent}`;
-      }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
       const buildingBlock = contentParser.parse(this.buildingBlock);
@@ -71,9 +83,9 @@ class NotionParser {
     }
   };
 
-  onCloseTag = (): void => {
+  onCloseTag = (tagName: string): void => {
     if (this.isWaitingForBodyElement) return;
-    if (this.buildingBlock?.block) {
+    if (this.buildingBlock?.block && tagNameToNotionBlockType[tagName] === this.buildingBlock.type) {
       this.pushToProducedBlocks();
     }
     this.currentElementsStack.pop();

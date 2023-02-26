@@ -8,34 +8,47 @@ class NotionParser {
         this.buildingBlock = {};
         this.producedBlocks = [];
         this.currentElementsStack = [];
+        this.lastElement = undefined;
         this.isWaitingForBodyElement = false;
         this.pushToProducedBlocks = () => {
             this.producedBlocks.push(this.buildingBlock);
             this.flushBuildingBlock();
         };
         this.getBlocks = () => this.producedBlocks.map(value => value.block).filter((value) => !!value);
-        this.onOpenTag = (tagName, attributes) => {
-            var _a;
-            console.log(attributes);
+        this.onOpenTag = (tagName) => {
+            var _a, _b;
             this.preCheckHtmlFormat(tagName);
             if (this.isWaitingForBodyElement)
                 return;
             if (this.currentElementsStack.length > 0 && !!((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block)) {
                 const isBlock = !!config_1.tagNameToNotionBlockType[tagName];
                 // if block were nested, flush buildingBlock to flat blocks
-                if (tagName === 'br' || isBlock) {
+                if (isBlock) {
                     this.pushToProducedBlocks();
                 }
-                this.currentElementsStack.push(tagName);
+                // if a br tag appears, add line break to current rich_text
+                if (tagName === 'br' && this.buildingBlock.type && this.lastElement !== 'br') {
+                    // @ts-ignore
+                    const richText = (_b = this.buildingBlock.block[this.buildingBlock.type]) === null || _b === void 0 ? void 0 : _b.rich_text;
+                    if (richText === null || richText === void 0 ? void 0 : richText.length) {
+                        richText.push({
+                            type: 'text',
+                            text: {
+                                content: '\n'
+                            }
+                        });
+                    }
+                }
             }
-            else {
-                this.currentElementsStack = [tagName];
-            }
+            this.currentElementsStack.push(tagName);
+            this.lastElement = tagName;
         };
         this.onText = (content) => {
             if (this.isWaitingForBodyElement)
                 return;
-            const currentBlockHasText = this.buildingBlock.block && this.currentElementsStack.length > 0;
+            // for annotation
+            // const currentBlockHasText =
+            //   this.buildingBlock.block && this.currentElementsStack.length > 0;
             // matches tabs, newlines, more than 2 spaces and
             // unicode zero-width characters (https://stackoverflow.com/a/11305926/5654715)
             let cleanContent = content
@@ -43,9 +56,6 @@ class NotionParser {
                 .replace(/\s{2,}/gm, ' ')
                 .trim();
             if (cleanContent) {
-                if (currentBlockHasText) {
-                    cleanContent = ` ${cleanContent}`;
-                }
                 const contentParser = this.initContentParser(cleanContent);
                 if (!contentParser)
                     return;
@@ -55,11 +65,11 @@ class NotionParser {
                 }
             }
         };
-        this.onCloseTag = () => {
+        this.onCloseTag = (tagName) => {
             var _a;
             if (this.isWaitingForBodyElement)
                 return;
-            if ((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block) {
+            if (((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block) && config_1.tagNameToNotionBlockType[tagName] === this.buildingBlock.type) {
                 this.pushToProducedBlocks();
             }
             this.currentElementsStack.pop();
