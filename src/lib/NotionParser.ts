@@ -14,6 +14,11 @@ class NotionParser {
 
   private isWaitingForBodyElement: boolean = false;
 
+  private pushToProducedBlocks = ():void => {
+    this.producedBlocks.push(this.buildingBlock);
+    this.flushBuildingBlock();
+  }
+
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
@@ -21,9 +26,10 @@ class NotionParser {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
-      if (tagName === 'br') {
-        this.producedBlocks.push(this.buildingBlock.block);
-        this.flushBuildingBlock();
+      const isBlock = !!tagNameToNotionBlockType[tagName]
+      // if block were nested, flush buildingBlock to flat blocks
+      if (tagName === 'br' || isBlock) {
+        this.pushToProducedBlocks();
       }
       this.currentElementsStack.push(tagName);
     } else {
@@ -42,7 +48,6 @@ class NotionParser {
 
   onText = (content: string): void => {
     if (this.isWaitingForBodyElement) return;
-    const addSpaceBeforeContent = (val: string) => ` ${val}`;
     const currentBlockHasText =
       this.buildingBlock.block && this.currentElementsStack.length > 0;
 
@@ -55,7 +60,7 @@ class NotionParser {
 
     if (cleanContent) {
       if (currentBlockHasText) {
-        cleanContent = addSpaceBeforeContent(cleanContent);
+        cleanContent = ` ${cleanContent}`;
       }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
@@ -68,19 +73,14 @@ class NotionParser {
 
   onCloseTag = (): void => {
     if (this.isWaitingForBodyElement) return;
-    if (this.buildingBlock?.block && this.currentElementsStack.length === 1) {
-      this.producedBlocks.push(this.buildingBlock);
-      this.flushBuildingBlock();
+    if (this.buildingBlock?.block) {
+      this.pushToProducedBlocks();
     }
-    this.currentElementsStack.splice(-1, 1);
+    this.currentElementsStack.pop();
   };
 
   flushBuildingBlock = (): void => {
     this.buildingBlock = {};
-  };
-
-  flushElementStack = () => {
-    this.currentElementsStack = [];
   };
 
   initContentParser = (content: string): ContentParser | undefined => {

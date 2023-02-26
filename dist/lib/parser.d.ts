@@ -1,3 +1,3 @@
-import { Block } from '@notionhq/client/build/src/api-types';
-declare const parseHtmlToNotionBlocks: (html: string) => Block[];
+import { BlockObjectRequestType } from './type/blockObjectRequests';
+declare const parseHtmlToNotionBlocks: (html: string) => BlockObjectRequestType[];
 export default parseHtmlToNotionBlocks;
