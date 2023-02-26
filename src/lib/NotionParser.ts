@@ -14,6 +14,11 @@ class NotionParser {
 
   private isWaitingForBodyElement: boolean = false;
 
+  private pushToProducedBlocks = ():void => {
+    this.producedBlocks.push(this.buildingBlock);
+    this.flushBuildingBlock();
+  }
+
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
@@ -24,8 +29,7 @@ class NotionParser {
       const isBlock = !!tagNameToNotionBlockType[tagName]
       // if block were nested, flush buildingBlock to flat blocks
       if (tagName === 'br' || isBlock) {
-        this.producedBlocks.push(this.buildingBlock);
-        this.flushBuildingBlock();
+        this.pushToProducedBlocks();
       }
       this.currentElementsStack.push(tagName);
     } else {
@@ -70,10 +74,8 @@ class NotionParser {
 
   onCloseTag = (): void => {
     if (this.isWaitingForBodyElement) return;
-    // this.currentElementsStack.length === 1
     if (this.buildingBlock?.block) {
-      this.producedBlocks.push(this.buildingBlock);
-      this.flushBuildingBlock();
+      this.pushToProducedBlocks();
     }
     this.currentElementsStack.splice(-1, 1);
   };
