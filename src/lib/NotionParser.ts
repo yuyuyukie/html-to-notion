@@ -24,8 +24,7 @@ class NotionParser {
 
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
-  onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
-    console.log(attributes);
+  onOpenTag = (tagName: string): void => {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
@@ -37,17 +36,18 @@ class NotionParser {
       // if a br tag appears, add line break to current rich_text
       if (tagName === 'br' && this.buildingBlock.type && this.lastElement !== 'br') {
         // @ts-ignore
-        this.buildingBlock.block[this.buildingBlock.type]?.rich_text.push({
-          type: 'text',
-          text: {
-            content: '\n'
-          }
-        } satisfies RichTextItemRequest);
+        const richText = this.buildingBlock.block[this.buildingBlock.type]?.rich_text as RichTextItemRequest[] | undefined;
+        if (richText?.length) {
+          richText.push({
+            type: 'text',
+            text: {
+              content: '\n'
+            }
+          } satisfies RichTextItemRequest);
+        }
       }
-      this.currentElementsStack.push(tagName);
-    } else {
-      this.currentElementsStack = [tagName];
     }
+    this.currentElementsStack.push(tagName);
     this.lastElement = tagName;
   };
 

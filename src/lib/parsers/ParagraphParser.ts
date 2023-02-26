@@ -29,8 +29,8 @@ class ParagraphParser extends ContentParser {
       };
     }
 
-    if(buildingBlock.block?.paragraph.rich_text) {
-      buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text, {
+    if(buildingBlock.block) {
+      buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text ?? [], {
         type: 'text',
         text: {
           content: this.content

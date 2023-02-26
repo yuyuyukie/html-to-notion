@@ -132,6 +132,23 @@ describe('NotionParser', () => {
   });
   describe('simple blocks', () => {
     describe('br', () => {
+      it('should ignore br tag before or after empty text', () => {
+        const testHtml = '<p><br/>HelloWorld<br/></p>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            type: 'paragraph',
+            object: 'block',
+            paragraph: {
+              rich_text: [{
+                type: 'text',
+                text: {
+                  content: 'HelloWorld'
+                }
+              }]
+            }
+          }
+        ] satisfies BlockObjectRequestType[]);
+      });
       it('should add a line break and push them to rich_text array if br tag appears', () => {
         const testHtml = '<p>Hello<br/>World</p>';
         expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
