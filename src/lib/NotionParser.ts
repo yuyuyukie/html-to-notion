@@ -8,15 +8,16 @@ import { tagNameToNotionBlockType } from './config';
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
 
-  private producedBlocks: BlockObjectRequestType[] = [];
+  private producedBlocks: BuildingBlock[] = [];
 
   private currentElementsStack: string[] = [];
 
   private isWaitingForBodyElement: boolean = false;
 
-  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks;
+  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
+    console.log(attributes);
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
@@ -27,10 +28,6 @@ class NotionParser {
       this.currentElementsStack.push(tagName);
     } else {
       this.currentElementsStack = [tagName];
-    }
-    const src = attributes.src ?? attributes.href;
-    if(src){
-      this.buildingBlock.src = src
     }
   };
 
@@ -62,7 +59,6 @@ class NotionParser {
       }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
-      console.log("parse", this.buildingBlock);
       const buildingBlock = contentParser.parse(this.buildingBlock);
       if (buildingBlock) {
         this.buildingBlock = buildingBlock;
@@ -73,7 +69,7 @@ class NotionParser {
   onCloseTag = (): void => {
     if (this.isWaitingForBodyElement) return;
     if (this.buildingBlock?.block && this.currentElementsStack.length === 1) {
-      this.producedBlocks.push(this.buildingBlock.block);
+      this.producedBlocks.push(this.buildingBlock);
       this.flushBuildingBlock();
     }
     this.currentElementsStack.splice(-1, 1);
@@ -89,10 +85,8 @@ class NotionParser {
 
   initContentParser = (content: string): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
-    console.log({ tagName });
     if (!tagName) return;
     const blockType = tagNameToNotionBlockType[tagName];
-    console.log({ blockType });
     switch (blockType) {
       case 'heading_1':
       case 'heading_2':

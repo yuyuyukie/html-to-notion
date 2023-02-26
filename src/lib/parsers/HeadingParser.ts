@@ -65,9 +65,6 @@ class HeadingParser extends ContentParser {
       type: 'text',
       text: {
         content: this.content,
-        link: buildingBlock.src ? {
-          url: buildingBlock.src
-        } : null
       },
     });
     console.log({ newBlock });

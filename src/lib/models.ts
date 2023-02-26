@@ -2,7 +2,7 @@ import {
   BlockObjectRequestType,
   Heading1ObjectRequest,
   Heading2ObjectRequest,
-  Heading3ObjectRequest,
+  Heading3ObjectRequest
 } from './type/blockObjectRequests';
 
 export type BuildingBlock<
@@ -10,7 +10,6 @@ export type BuildingBlock<
 > = {
   block?: Extract<BlockObjectRequestType, T>;
   type?: T['type'];
-  src?: string;
 };
 
 export const initialHeading1 = (buildingBlock?: BuildingBlock): BuildingBlock<Heading1ObjectRequest> => ({
@@ -20,9 +19,9 @@ export const initialHeading1 = (buildingBlock?: BuildingBlock): BuildingBlock<He
     type: 'heading_1',
     object: 'block',
     heading_1: {
-      rich_text: [],
-    },
-  },
+      rich_text: []
+    }
+  }
 });
 export const initialHeading2 = (buildingBlock?: BuildingBlock): BuildingBlock<Heading2ObjectRequest> => ({
   ...buildingBlock,
@@ -31,9 +30,9 @@ export const initialHeading2 = (buildingBlock?: BuildingBlock): BuildingBlock<He
     type: 'heading_2',
     object: 'block',
     heading_2: {
-      rich_text: [],
-    },
-  },
+      rich_text: []
+    }
+  }
 });
 export const initialHeading3 = (buildingBlock?: BuildingBlock): BuildingBlock<Heading3ObjectRequest> => ({
   ...buildingBlock,
@@ -42,7 +41,7 @@ export const initialHeading3 = (buildingBlock?: BuildingBlock): BuildingBlock<He
     type: 'heading_3',
     object: 'block',
     heading_3: {
-      rich_text: [],
-    },
-  },
+      rich_text: []
+    }
+  }
 });

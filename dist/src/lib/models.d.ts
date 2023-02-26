@@ -2,7 +2,6 @@ import { BlockObjectRequestType, Heading1ObjectRequest, Heading2ObjectRequest, H
 export type BuildingBlock<T extends BlockObjectRequestType = BlockObjectRequestType> = {
     block?: Extract<BlockObjectRequestType, T>;
     type?: T['type'];
-    src?: string;
 };
 export declare const initialHeading1: (buildingBlock?: BuildingBlock) => BuildingBlock<Heading1ObjectRequest>;
 export declare const initialHeading2: (buildingBlock?: BuildingBlock) => BuildingBlock<Heading2ObjectRequest>;
