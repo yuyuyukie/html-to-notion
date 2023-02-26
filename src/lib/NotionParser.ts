@@ -8,15 +8,16 @@ import { tagNameToNotionBlockType } from './config';
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
 
-  private producedBlocks: BlockObjectRequestType[] = [];
+  private producedBlocks: BuildingBlock[] = [];
 
   private currentElementsStack: string[] = [];
 
   private isWaitingForBodyElement: boolean = false;
 
-  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks;
+  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
   onOpenTag = (tagName: string, attributes: { [s: string]: string }): void => {
+    console.log(attributes);
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
@@ -68,7 +69,7 @@ class NotionParser {
   onCloseTag = (): void => {
     if (this.isWaitingForBodyElement) return;
     if (this.buildingBlock?.block && this.currentElementsStack.length === 1) {
-      this.producedBlocks.push(this.buildingBlock.block);
+      this.producedBlocks.push(this.buildingBlock);
       this.flushBuildingBlock();
     }
     this.currentElementsStack.splice(-1, 1);
