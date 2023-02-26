@@ -22,7 +22,7 @@ class NotionParser {
     if (this.isWaitingForBodyElement) return;
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
       if (tagName === 'br') {
-        this.producedBlocks.push(this.buildingBlock.block);
+        this.producedBlocks.push(this.buildingBlock);
         this.flushBuildingBlock();
       }
       this.currentElementsStack.push(tagName);
