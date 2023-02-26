@@ -48,7 +48,6 @@ class NotionParser {
 
   onText = (content: string): void => {
     if (this.isWaitingForBodyElement) return;
-    const addSpaceBeforeContent = (val: string) => ` ${val}`;
     const currentBlockHasText =
       this.buildingBlock.block && this.currentElementsStack.length > 0;
 
@@ -61,7 +60,7 @@ class NotionParser {
 
     if (cleanContent) {
       if (currentBlockHasText) {
-        cleanContent = addSpaceBeforeContent(cleanContent);
+        cleanContent = ` ${cleanContent}`;
       }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
@@ -77,15 +76,11 @@ class NotionParser {
     if (this.buildingBlock?.block) {
       this.pushToProducedBlocks();
     }
-    this.currentElementsStack.splice(-1, 1);
+    this.currentElementsStack.pop();
   };
 
   flushBuildingBlock = (): void => {
     this.buildingBlock = {};
-  };
-
-  flushElementStack = () => {
-    this.currentElementsStack = [];
   };
 
   initContentParser = (content: string): ContentParser | undefined => {
