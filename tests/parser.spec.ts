@@ -135,6 +135,28 @@ describe('NotionParser', () => {
           }
         ] satisfies BlockObjectRequestType[]);
       });
+      it('should ignore continuous br tags', () => {
+        const testHtml = '<p>Hello<br/><br/>World</p>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            type: 'paragraph',
+            object: 'block',
+            paragraph: {
+              rich_text: [{
+                type: 'text',
+                text: {
+                  content: 'Hello'
+                }
+              }, {
+                type: 'text',
+                text: {
+                  content: '\n World'
+                }
+              }]
+            }
+          }
+        ] satisfies BlockObjectRequestType[]);
+      });
     });
     it('should parse divs', () => {
       const testHtml = '<div>div text </div>';

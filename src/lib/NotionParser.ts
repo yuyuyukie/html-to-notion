@@ -13,6 +13,8 @@ class NotionParser {
 
   private currentElementsStack: string[] = [];
 
+  private lastElement: string | undefined = undefined;
+
   private isWaitingForBodyElement: boolean = false;
 
   private pushToProducedBlocks = (): void => {
@@ -33,7 +35,7 @@ class NotionParser {
         this.pushToProducedBlocks();
       }
       // if a br tag appears, add line break to current rich_text
-      if (tagName === 'br' && this.buildingBlock.type) {
+      if (tagName === 'br' && this.buildingBlock.type && this.lastElement !== 'br') {
         // @ts-ignore
         this.buildingBlock.block[this.buildingBlock.type]?.rich_text.push({
           type: 'text',
@@ -46,6 +48,7 @@ class NotionParser {
     } else {
       this.currentElementsStack = [tagName];
     }
+    this.lastElement = tagName;
   };
 
   private preCheckHtmlFormat(tagName: string) {
