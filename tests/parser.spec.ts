@@ -101,9 +101,9 @@ describe('NotionParser', () => {
           paragraph: {
             rich_text: [
               { text: { content: 'text1' }, type: 'text' },
-              { text: { content: ' text2' }, type: 'text' },
-              { text: { content: ' text3' }, type: 'text' },
-              { text: { content: ' text4' }, type: 'text' }
+              { text: { content: 'text2' }, type: 'text' },
+              { text: { content: 'text3' }, type: 'text' },
+              { text: { content: 'text4' }, type: 'text' }
             ]
           },
           type: 'paragraph'
@@ -147,7 +147,7 @@ describe('NotionParser', () => {
               }, {
                 type: 'text',
                 text: {
-                  content: '\n World'
+                  content: '\nWorld'
                 }
               }]
             }
@@ -169,7 +169,7 @@ describe('NotionParser', () => {
               }, {
                 type: 'text',
                 text: {
-                  content: '\n World'
+                  content: '\nWorld'
                 }
               }]
             }

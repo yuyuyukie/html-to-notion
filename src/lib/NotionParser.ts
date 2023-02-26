@@ -62,8 +62,9 @@ class NotionParser {
 
   onText = (content: string): void => {
     if (this.isWaitingForBodyElement) return;
-    const currentBlockHasText =
-      this.buildingBlock.block && this.currentElementsStack.length > 0;
+    // for annotation
+    // const currentBlockHasText =
+    //   this.buildingBlock.block && this.currentElementsStack.length > 0;
 
     // matches tabs, newlines, more than 2 spaces and
     // unicode zero-width characters (https://stackoverflow.com/a/11305926/5654715)
@@ -73,9 +74,6 @@ class NotionParser {
       .trim();
 
     if (cleanContent) {
-      if (currentBlockHasText) {
-        cleanContent = ` ${cleanContent}`;
-      }
       const contentParser = this.initContentParser(cleanContent);
       if (!contentParser) return;
       const buildingBlock = contentParser.parse(this.buildingBlock);
