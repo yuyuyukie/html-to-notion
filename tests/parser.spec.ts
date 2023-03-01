@@ -91,10 +91,9 @@ describe('NotionParser', () => {
     });
   });
   describe('annotations', () => {
-    // TODO add span support
-    xit('should parse a series of text paragraphs', () => {
+    it('should parse span as rich_text', () => {
       const testHtml =
-        '<p>text1<span>text2</span>text3<strong>text4</strong></p>';
+        '<p>text1<span>text2</span>text3</p>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
         {
           object: 'block',
@@ -103,7 +102,6 @@ describe('NotionParser', () => {
               { text: { content: 'text1' }, type: 'text' },
               { text: { content: 'text2' }, type: 'text' },
               { text: { content: 'text3' }, type: 'text' },
-              { text: { content: 'text4' }, type: 'text' }
             ]
           },
           type: 'paragraph'
