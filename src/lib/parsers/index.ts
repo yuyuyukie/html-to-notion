@@ -2,8 +2,6 @@ import { BuildingBlock } from '../models';
 import { RichText, RichTextItemRequest } from '../type/redefinitions';
 
 abstract class ContentParser {
-  constructor(protected content: string) {}
-
   protected addRichText(rich_text: RichTextItemRequest[], addingRichText: RichText):RichTextItemRequest[] {
     console.log({ rich_text });
     const lastElement = rich_text[rich_text.length - 1];
@@ -17,7 +15,7 @@ abstract class ContentParser {
     return r;
   }
   public abstract parse(
-    buildingBlock?: BuildingBlock
+    content: string, buildingBlock?: BuildingBlock
   ): BuildingBlock | undefined;
 }
 

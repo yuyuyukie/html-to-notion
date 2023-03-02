@@ -9,12 +9,13 @@ type ParagraphBuildingBlock = BuildingBlock<ParagraphObjectRequest>;
 class ParagraphParser extends ContentParser {
   private readonly type: Type;
 
-  constructor(content: string, type: Type) {
-    super(content);
+  constructor(type: Type) {
+    super();
     this.type = type;
   }
 
   parse = (
+    content: string,
     buildingBlock: ParagraphBuildingBlock
   ): ParagraphBuildingBlock => {
     if (!buildingBlock.block) {
@@ -33,7 +34,7 @@ class ParagraphParser extends ContentParser {
       buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text ?? [], {
         type: 'text',
         text: {
-          content: this.content
+          content
         }
       });
     }

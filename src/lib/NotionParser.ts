@@ -74,9 +74,9 @@ class NotionParser {
       .trim();
 
     if (cleanContent) {
-      const contentParser = this.initContentParser(cleanContent);
+      const contentParser = this.initContentParser();
       if (!contentParser) return;
-      const buildingBlock = contentParser.parse(this.buildingBlock);
+      const buildingBlock = contentParser.parse(cleanContent, this.buildingBlock);
       if (buildingBlock) {
         this.buildingBlock = buildingBlock;
       }
@@ -95,7 +95,7 @@ class NotionParser {
     this.buildingBlock = {};
   };
 
-  initContentParser = (content: string): ContentParser | undefined => {
+  initContentParser = (): ContentParser | undefined => {
     const tagName = [...this.currentElementsStack].pop();
     if (!tagName) return;
     const blockType = tagNameToNotionBlockType[tagName];
@@ -103,10 +103,10 @@ class NotionParser {
       case 'heading_1':
       case 'heading_2':
       case 'heading_3': {
-        return new HeadingParser(content, blockType);
+        return new HeadingParser(blockType);
       }
       case 'paragraph': {
-        return new ParagraphParser(content, 'paragraph');
+        return new ParagraphParser('paragraph');
       }
     }
   };
