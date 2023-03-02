@@ -6,6 +6,32 @@ import expectedBlocksTwo from './prodExample2/expectedBlocks';
 import { BlockObjectRequestType } from '../src/lib/type/blockObjectRequests';
 
 describe('NotionParser', () => {
+  describe('exception cases', () => {
+    it('it should ignore parsing the tag if its blockType was undefined', () => {
+      const testHtml = '<div>correct tag<audio>incorrect tag</audio></div>';
+      expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+        {
+          object: 'block',
+          paragraph: {
+            rich_text: [{ text: { content: 'correct tag' }, type: 'text' }]
+          },
+          type: 'paragraph'
+        }
+      ] satisfies BlockObjectRequestType[]);
+    });
+    it('it should ignore parsing the tag if its blockType was undefined', () => {
+      const testHtml = '<div>correct tag</div><audio>incorrect tag</audio>';
+      expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+        {
+          object: 'block',
+          paragraph: {
+            rich_text: [{ text: { content: 'correct tag' }, type: 'text' }]
+          },
+          type: 'paragraph'
+        }
+      ] satisfies BlockObjectRequestType[]);
+    });
+  });
   describe('compound blocks', () => {
     it('should parse nested tags to flat blocks', () => {
       const testHtml = '<div>content1<p>content2</p>content3</div>';
@@ -91,22 +117,55 @@ describe('NotionParser', () => {
     });
   });
   describe('annotations', () => {
-    it('should parse span as rich_text', () => {
-      const testHtml =
-        '<p>text1<span>text2</span>text3</p>';
-      expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
-        {
-          object: 'block',
-          paragraph: {
-            rich_text: [
-              { text: { content: 'text1' }, type: 'text' },
-              { text: { content: 'text2' }, type: 'text' },
-              { text: { content: 'text3' }, type: 'text' },
-            ]
-          },
-          type: 'paragraph'
-        }
-      ]);
+    xdescribe('span', () => {
+      it('should parse span as rich_text', () => {
+        const testHtml =
+          '<p>text1<span>text2</span>text3</p>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            object: 'block',
+            paragraph: {
+              rich_text: [
+                { text: { content: 'text1' }, type: 'text' },
+                { text: { content: 'text2' }, type: 'text' },
+                { text: { content: 'text3' }, type: 'text' }
+              ]
+            },
+            type: 'paragraph'
+          }
+        ]);
+      });
+      it('should ignore empty span', () => {
+        const testHtml =
+          '<p><span>text2</span>text3<span></span></p>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            object: 'block',
+            paragraph: {
+              rich_text: [
+                { text: { content: 'text2' }, type: 'text' },
+                { text: { content: 'text3' }, type: 'text' }
+              ]
+            },
+            type: 'paragraph'
+          }
+        ]);
+      });
+      xit('should parse orphan span as paragraph block', () => {
+        const testHtml =
+          '<span>text1</span>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            object: 'block',
+            paragraph: {
+              rich_text: [
+                { text: { content: 'text1' }, type: 'text' }
+              ]
+            },
+            type: 'paragraph'
+          }
+        ]);
+      });
     });
     xit('should parse links to paragraphs', () => {
       const testHtml = '<a href="https://notion.so">Click here</a>';

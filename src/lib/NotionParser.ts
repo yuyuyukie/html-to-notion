@@ -105,7 +105,7 @@ class NotionParser {
       case 'heading_3': {
         return new HeadingParser(content, blockType);
       }
-      default: {
+      case 'paragraph': {
         return new ParagraphParser(content, 'paragraph');
       }
     }
