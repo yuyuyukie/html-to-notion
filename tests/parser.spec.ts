@@ -6,21 +6,29 @@ import expectedBlocksTwo from './prodExample2/expectedBlocks';
 import { BlockObjectRequestType } from '../src/lib/type/blockObjectRequests';
 
 describe('NotionParser', () => {
-  describe('exception cases', () => {
-    it('it should ignore parsing the tag if its blockType was undefined', () => {
+  describe('unsupported tags', () => {
+    it('should parse unsupported tags as inline text when it\'s inside of a block', () => {
       const testHtml = '<div>correct tag<audio>incorrect tag</audio></div>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
         {
           object: 'block',
           paragraph: {
-            rich_text: [{ text: { content: 'correct tag' }, type: 'text' }]
+            rich_text: [
+              {
+                text: { content: 'correct tag' },
+                type: 'text'
+              }, {
+                text: { content: 'incorrect tag' },
+                type: 'text'
+              }
+            ]
           },
           type: 'paragraph'
         }
       ] satisfies BlockObjectRequestType[]);
     });
-    it('it should ignore parsing the tag if its blockType was undefined', () => {
-      const testHtml = '<div>correct tag</div><audio>incorrect tag</audio>';
+    it('should parse unsupported tags as paragraph block when it is independent', () => {
+      const testHtml = '<div>correct tag</div><video>incorrect tag</video>';
       expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
         {
           object: 'block',
@@ -28,7 +36,14 @@ describe('NotionParser', () => {
             rich_text: [{ text: { content: 'correct tag' }, type: 'text' }]
           },
           type: 'paragraph'
-        }
+        },
+        {
+          object: 'block',
+          paragraph: {
+            rich_text: [{ text: { content: 'incorrect tag' }, type: 'text' }]
+          },
+          type: 'paragraph'
+        },
       ] satisfies BlockObjectRequestType[]);
     });
   });
