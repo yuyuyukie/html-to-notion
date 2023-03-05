@@ -5,6 +5,7 @@ import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
 import { tagNameToNotionBlockType } from './config';
 import { RichText, RichTextItemRequest } from './type/redefinitions';
+import { cloneDeep } from 'lodash';
 
 type ElementInfo = {
   tagName: string
@@ -15,7 +16,7 @@ type ElementInfo = {
 class NotionParser {
   private buildingBlock: BuildingBlock = {};
 
-  private producedBlocks: BuildingBlock[] = [];
+  private producedBlocks: BlockObjectRequestType[] = [];
 
   private currentElementsStack: ElementInfo[] = [];
 
@@ -32,11 +33,12 @@ class NotionParser {
   }
 
   private pushToProducedBlocks = (): void => {
-    this.producedBlocks.push(this.buildingBlock);
+    if(!this.buildingBlock.block) return;
+    this.producedBlocks.push(cloneDeep(this.buildingBlock.block));
     this.flushBuildingBlock();
   };
 
-  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
+  getBlocks = (): BlockObjectRequestType[] => this.producedBlocks;
 
   onOpenTag = (tagName: string, attrs: Attributes): void => {
     this.preCheckHtmlFormat(tagName);

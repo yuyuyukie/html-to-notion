@@ -1,12 +1,12 @@
 import { BuildingBlock } from '../models';
 import { RichText, RichTextItemRequest } from '../type/redefinitions';
+import { cloneDeep } from 'lodash';
 
 abstract class ContentParser {
   protected addRichText(rich_text: RichTextItemRequest[], addingRichText: RichText):RichTextItemRequest[] {
-    console.log({ rich_text });
     const lastElement = rich_text[rich_text.length - 1];
-    const r = [...rich_text];
-    const a = {...addingRichText}
+    const r = cloneDeep(rich_text);
+    const a = cloneDeep(addingRichText)
     if(lastElement && lastElement.type === "text" && lastElement.text.content === "\n"){
       a.text.content = `\n${a.text.content}`
       r.pop();
