@@ -206,6 +206,10 @@ describe('NotionParser', () => {
           }
         ] satisfies BlockObjectRequestType[]);
       });
+      it('should ignore anchor with empty title', () => {
+        const testHtml = '<a href="https://notion.so"></a>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([] satisfies BlockObjectRequestType[]);
+      });
     });
   });
   describe('simple blocks', () => {
