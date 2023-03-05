@@ -132,7 +132,7 @@ describe('NotionParser', () => {
     });
   });
   describe('annotations', () => {
-    xdescribe('span', () => {
+    describe('span', () => {
       it('should parse span as rich_text', () => {
         const testHtml =
           '<p>text1<span>text2</span>text3</p>';
@@ -152,13 +152,14 @@ describe('NotionParser', () => {
       });
       it('should ignore empty span', () => {
         const testHtml =
-          '<p><span>text2</span>text3<span></span></p>';
+          '<p><span><span>tex</span>t2</span>text3<span></span></p>';
         expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
           {
             object: 'block',
             paragraph: {
               rich_text: [
-                { text: { content: 'text2' }, type: 'text' },
+                { text: { content: 'tex' }, type: 'text' },
+                { text: { content: 't2' }, type: 'text' },
                 { text: { content: 'text3' }, type: 'text' }
               ]
             },

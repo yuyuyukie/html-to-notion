@@ -26,6 +26,10 @@ class NotionParser {
     return this.currentElementsStack[this.currentElementsStack.length - 1];
   }
 
+  private get isInBlock():boolean {
+    return this.currentElementsStack.some(value => value.isBlock)
+  }
+
   private pushToProducedBlocks = (): void => {
     this.producedBlocks.push(this.buildingBlock);
     this.flushBuildingBlock();
@@ -36,7 +40,11 @@ class NotionParser {
   onOpenTag = (tagName: string): void => {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
-    const isBlock = !!tagNameToNotionBlockType[tagName] || !this.buildingBlock.block;
+    /**
+     * - if tagName-notionBlock mapping was specified
+     * - if tag was 1st depth nested and
+     */
+    const isBlock = !!tagNameToNotionBlockType[tagName] || (!this.buildingBlock.block && !this.isInBlock);
     if (this.currentElementsStack.length > 0 && !!this.buildingBlock?.block) {
       // if block were nested, flush buildingBlock to flat blocks
       if (isBlock) {
