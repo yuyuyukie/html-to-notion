@@ -15,7 +15,7 @@ abstract class ContentParser {
     return r;
   }
   public abstract parse(
-    content: string, buildingBlock?: BuildingBlock
+    richText: RichText, buildingBlock?: BuildingBlock
   ): BuildingBlock | undefined;
 }
 

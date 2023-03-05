@@ -1,14 +1,15 @@
 import ContentParser from './parsers';
 import { BuildingBlock } from './models';
-import { BlockObjectRequestType } from './type/blockObjectRequests';
+import { Attributes, BlockObjectRequestType } from './type/blockObjectRequests';
 import HeadingParser from './parsers/HeadingParser';
 import ParagraphParser from './parsers/ParagraphParser';
 import { tagNameToNotionBlockType } from './config';
-import { RichTextItemRequest } from './type/redefinitions';
+import { RichText, RichTextItemRequest } from './type/redefinitions';
 
 type ElementInfo = {
   tagName: string
   isBlock: boolean
+  richText: RichText
 }
 
 class NotionParser {
@@ -37,7 +38,7 @@ class NotionParser {
 
   getBlocks = (): BlockObjectRequestType[] => this.producedBlocks.map(value => value.block).filter<BlockObjectRequestType>((value): value is BlockObjectRequestType => !!value);
 
-  onOpenTag = (tagName: string): void => {
+  onOpenTag = (tagName: string, attrs: Attributes): void => {
     this.preCheckHtmlFormat(tagName);
     if (this.isWaitingForBodyElement) return;
     /**
@@ -64,9 +65,21 @@ class NotionParser {
         }
       }
     }
+    const richText:RichText = {
+      type:'text',
+      text: {
+        content: ""
+      },
+    }
+    if(tagName === "a"){
+      richText.text.link = {
+        url: attrs.href ?? ""
+      }
+    }
     this.currentElementsStack.push({
       tagName,
-      isBlock
+      isBlock,
+      richText
     });
     this.lastElement = tagName;
   };
@@ -98,7 +111,12 @@ class NotionParser {
         this.buildingBlock.parser = this.initContentParser();
       }
       if (!this.buildingBlock.parser) return;
-      const buildingBlock = this.buildingBlock.parser.parse(cleanContent, this.buildingBlock);
+        const addingRichText:RichText = this.currentElementsStack.map<RichText>(value => value.richText).reduce((result, richText) => ({
+          ...result,
+          ...richText
+        }))
+      addingRichText.text.content = cleanContent
+      const buildingBlock = this.buildingBlock.parser.parse(addingRichText, this.buildingBlock);
       if (buildingBlock) {
         this.buildingBlock = buildingBlock;
       }

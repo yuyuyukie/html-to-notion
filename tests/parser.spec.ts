@@ -43,7 +43,7 @@ describe('NotionParser', () => {
             rich_text: [{ text: { content: 'incorrect tag' }, type: 'text' }]
           },
           type: 'paragraph'
-        },
+        }
       ] satisfies BlockObjectRequestType[]);
     });
   });
@@ -183,24 +183,29 @@ describe('NotionParser', () => {
         ]);
       });
     });
-    xit('should parse links to paragraphs', () => {
-      const testHtml = '<a href="https://notion.so">Click here</a>';
-      expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
-        {
-          object: 'block',
-          paragraph: {
-            rich_text: [
-              {
-                text: {
-                  content: 'Click here'
-                },
-                type: 'text'
-              }
-            ]
-          },
-          type: 'paragraph'
-        }
-      ]);
+    describe('a', () => {
+      it('should parse anchor tag to paragraphs', () => {
+        const testHtml = '<a href="https://notion.so">Click here</a>';
+        expect(parseHtmlToNotionBlocks(testHtml)).toStrictEqual([
+          {
+            object: 'block',
+            paragraph: {
+              rich_text: [
+                {
+                  text: {
+                    content: 'Click here',
+                    link: {
+                      url: "https://notion.so"
+                    }
+                  },
+                  type: 'text'
+                }
+              ]
+            },
+            type: 'paragraph'
+          }
+        ] satisfies BlockObjectRequestType[]);
+      });
     });
   });
   describe('simple blocks', () => {

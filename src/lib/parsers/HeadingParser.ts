@@ -10,6 +10,7 @@ import {
   Heading2ObjectRequest,
   Heading3ObjectRequest
 } from '../type/blockObjectRequests';
+import { RichText } from '../type/redefinitions';
 
 type HeadingBuildingBlock = BuildingBlock<
   Heading1ObjectRequest | Heading2ObjectRequest | Heading3ObjectRequest
@@ -47,7 +48,7 @@ class HeadingParser extends ContentParser {
   }
 
   parse = (
-    content: string,
+    richText: RichText,
     buildingBlock: HeadingBuildingBlock
   ): undefined | HeadingBuildingBlock => {
     const newBlock = this.makeBuildingBlock(buildingBlock);
@@ -65,7 +66,7 @@ class HeadingParser extends ContentParser {
     block.rich_text.push({
       type: 'text',
       text: {
-        content
+        content: richText.text.content
       }
     });
     console.log({ newBlock });

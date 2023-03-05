@@ -4,8 +4,8 @@ import { BlockObjectRequestType } from './type/blockObjectRequests';
 
 const initParser = (notionParser: NotionParser) =>
   new Parser({
-    onopentag(tagName) {
-      notionParser.onOpenTag(tagName);
+    onopentag(tagName, attrs) {
+      notionParser.onOpenTag(tagName, attrs);
     },
     ontext(content) {
       notionParser.onText(content);
