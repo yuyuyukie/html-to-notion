@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const HeadingParser_1 = require("./parsers/HeadingParser");
 const ParagraphParser_1 = require("./parsers/ParagraphParser");
 const config_1 = require("./config");
+const lodash_1 = require("lodash");
 class NotionParser {
     constructor() {
         this.buildingBlock = {};
@@ -11,17 +12,23 @@ class NotionParser {
         this.lastElement = undefined;
         this.isWaitingForBodyElement = false;
         this.pushToProducedBlocks = () => {
-            this.producedBlocks.push(this.buildingBlock);
+            if (!this.buildingBlock.block)
+                return;
+            this.producedBlocks.push((0, lodash_1.cloneDeep)(this.buildingBlock.block));
             this.flushBuildingBlock();
         };
-        this.getBlocks = () => this.producedBlocks.map(value => value.block).filter((value) => !!value);
-        this.onOpenTag = (tagName) => {
-            var _a, _b;
+        this.getBlocks = () => this.producedBlocks;
+        this.onOpenTag = (tagName, attrs) => {
+            var _a, _b, _c;
             this.preCheckHtmlFormat(tagName);
             if (this.isWaitingForBodyElement)
                 return;
+            /**
+             * - if tagName-notionBlock mapping was specified
+             * - if tag was 1st depth nested and
+             */
+            const isBlock = !!config_1.tagNameToNotionBlockType[tagName] || (!this.buildingBlock.block && !this.isInBlock);
             if (this.currentElementsStack.length > 0 && !!((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block)) {
-                const isBlock = !!config_1.tagNameToNotionBlockType[tagName];
                 // if block were nested, flush buildingBlock to flat blocks
                 if (isBlock) {
                     this.pushToProducedBlocks();
@@ -40,7 +47,22 @@ class NotionParser {
                     }
                 }
             }
-            this.currentElementsStack.push(tagName);
+            const richText = {
+                type: 'text',
+                text: {
+                    content: ""
+                },
+            };
+            if (tagName === "a") {
+                richText.text.link = {
+                    url: (_c = attrs.href) !== null && _c !== void 0 ? _c : ""
+                };
+            }
+            this.currentElementsStack.push({
+                tagName,
+                isBlock,
+                richText
+            });
             this.lastElement = tagName;
         };
         this.onText = (content) => {
@@ -56,20 +78,25 @@ class NotionParser {
                 .replace(/\s{2,}/gm, ' ')
                 .trim();
             if (cleanContent) {
-                const contentParser = this.initContentParser(cleanContent);
-                if (!contentParser)
+                if (!this.buildingBlock.parser) {
+                    this.buildingBlock.parser = this.initContentParser();
+                }
+                if (!this.buildingBlock.parser)
                     return;
-                const buildingBlock = contentParser.parse(this.buildingBlock);
+                const addingRichText = this.currentElementsStack.map(value => value.richText).reduce((result, richText) => (Object.assign(Object.assign({}, result), richText)));
+                addingRichText.text.content = cleanContent;
+                const buildingBlock = this.buildingBlock.parser.parse(addingRichText, this.buildingBlock);
                 if (buildingBlock) {
                     this.buildingBlock = buildingBlock;
                 }
             }
         };
         this.onCloseTag = (tagName) => {
-            var _a;
+            var _a, _b;
             if (this.isWaitingForBodyElement)
                 return;
-            if (((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block) && config_1.tagNameToNotionBlockType[tagName] === this.buildingBlock.type) {
+            console.log(tagName);
+            if (((_a = this.buildingBlock) === null || _a === void 0 ? void 0 : _a.block) && ((_b = this.currentElement) === null || _b === void 0 ? void 0 : _b.isBlock)) {
                 this.pushToProducedBlocks();
             }
             this.currentElementsStack.pop();
@@ -77,22 +104,31 @@ class NotionParser {
         this.flushBuildingBlock = () => {
             this.buildingBlock = {};
         };
-        this.initContentParser = (content) => {
-            const tagName = [...this.currentElementsStack].pop();
-            if (!tagName)
+        this.initContentParser = () => {
+            const elementInfo = [...this.currentElementsStack].pop();
+            if (!elementInfo)
                 return;
-            const blockType = config_1.tagNameToNotionBlockType[tagName];
+            const blockType = config_1.tagNameToNotionBlockType[elementInfo.tagName];
             switch (blockType) {
                 case 'heading_1':
                 case 'heading_2':
                 case 'heading_3': {
-                    return new HeadingParser_1.default(content, blockType);
+                    return new HeadingParser_1.default(blockType);
+                }
+                case 'paragraph': {
+                    return new ParagraphParser_1.default('paragraph');
                 }
                 default: {
-                    return new ParagraphParser_1.default(content, 'paragraph');
+                    return new ParagraphParser_1.default('paragraph');
                 }
             }
         };
+    }
+    get currentElement() {
+        return this.currentElementsStack[this.currentElementsStack.length - 1];
+    }
+    get isInBlock() {
+        return this.currentElementsStack.some(value => value.isBlock);
     }
     preCheckHtmlFormat(tagName) {
         if (tagName === 'html') {

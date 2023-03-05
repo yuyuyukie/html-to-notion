@@ -3,13 +3,14 @@ import {
   BuildingBlock,
   initialHeading1,
   initialHeading2,
-  initialHeading3,
+  initialHeading3
 } from '../models';
 import {
   Heading1ObjectRequest,
   Heading2ObjectRequest,
-  Heading3ObjectRequest,
+  Heading3ObjectRequest
 } from '../type/blockObjectRequests';
+import { RichText } from '../type/redefinitions';
 
 type HeadingBuildingBlock = BuildingBlock<
   Heading1ObjectRequest | Heading2ObjectRequest | Heading3ObjectRequest
@@ -19,12 +20,12 @@ type Type = NonNullable<HeadingBuildingBlock['type']>;
 class HeadingParser extends ContentParser {
   private readonly type: Type;
 
-  constructor(content: string, type: Type) {
-    super(content);
+  constructor(type: Type) {
+    super();
     this.type = type;
   }
 
-  private makeBuildingBlock(buildingBlock: HeadingBuildingBlock):HeadingBuildingBlock{
+  private makeBuildingBlock(buildingBlock: HeadingBuildingBlock): HeadingBuildingBlock {
     if (!buildingBlock.block) {
       switch (this.type) {
         case 'heading_1': {
@@ -47,6 +48,7 @@ class HeadingParser extends ContentParser {
   }
 
   parse = (
+    richText: RichText,
     buildingBlock: HeadingBuildingBlock
   ): undefined | HeadingBuildingBlock => {
     const newBlock = this.makeBuildingBlock(buildingBlock);
@@ -64,8 +66,8 @@ class HeadingParser extends ContentParser {
     block.rich_text.push({
       type: 'text',
       text: {
-        content: this.content,
-      },
+        content: richText.text.content
+      }
     });
     console.log({ newBlock });
     return newBlock;

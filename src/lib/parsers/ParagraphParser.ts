@@ -1,6 +1,7 @@
 import ContentParser from './index';
 import { BuildingBlock } from '../models';
 import { ParagraphObjectRequest } from '../type/blockObjectRequests';
+import { RichText } from '../type/redefinitions';
 
 export type Type = NonNullable<BuildingBlock<ParagraphObjectRequest>['type']>;
 
@@ -9,13 +10,14 @@ type ParagraphBuildingBlock = BuildingBlock<ParagraphObjectRequest>;
 class ParagraphParser extends ContentParser {
   private readonly type: Type;
 
-  constructor(content: string, type: Type) {
-    super(content);
+  constructor(type: Type) {
+    super();
     this.type = type;
   }
 
   parse = (
-    buildingBlock: ParagraphBuildingBlock
+    richText: RichText,
+    buildingBlock: ParagraphBuildingBlock,
   ): ParagraphBuildingBlock => {
     if (!buildingBlock.block) {
       buildingBlock = {
@@ -30,12 +32,7 @@ class ParagraphParser extends ContentParser {
     }
 
     if(buildingBlock.block) {
-      buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text ?? [], {
-        type: 'text',
-        text: {
-          content: this.content
-        }
-      });
+      buildingBlock.block.paragraph.rich_text = this.addRichText(buildingBlock.block.paragraph.rich_text ?? [], richText);
     }
     return buildingBlock;
   };

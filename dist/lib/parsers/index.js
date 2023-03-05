@@ -1,14 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
 class ContentParser {
-    constructor(content) {
-        this.content = content;
-    }
     addRichText(rich_text, addingRichText) {
-        console.log({ rich_text });
         const lastElement = rich_text[rich_text.length - 1];
-        const r = [...rich_text];
-        const a = Object.assign({}, addingRichText);
+        const r = (0, lodash_1.cloneDeep)(rich_text);
+        const a = (0, lodash_1.cloneDeep)(addingRichText);
         if (lastElement && lastElement.type === "text" && lastElement.text.content === "\n") {
             a.text.content = `\n${a.text.content}`;
             r.pop();
