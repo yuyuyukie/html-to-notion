@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
 const models_1 = require("../models");
 class HeadingParser extends _1.default {
-    constructor(content, type) {
-        super(content);
-        this.parse = (buildingBlock) => {
+    constructor(type) {
+        super();
+        this.parse = (richText, buildingBlock) => {
             const newBlock = this.makeBuildingBlock(buildingBlock);
             // utilize flows
             // @ts-ignore
@@ -16,8 +16,8 @@ class HeadingParser extends _1.default {
             block.rich_text.push({
                 type: 'text',
                 text: {
-                    content: this.content,
-                },
+                    content: richText.text.content
+                }
             });
             console.log({ newBlock });
             return newBlock;

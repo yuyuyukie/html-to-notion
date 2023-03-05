@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./index");
 class ParagraphParser extends index_1.default {
-    constructor(content, type) {
-        super(content);
-        this.parse = (buildingBlock) => {
+    constructor(type) {
+        super();
+        this.parse = (richText, buildingBlock) => {
             var _a;
             if (!buildingBlock.block) {
                 buildingBlock = Object.assign(Object.assign({}, buildingBlock), { type: 'paragraph', block: {
@@ -14,12 +14,7 @@ class ParagraphParser extends index_1.default {
                     } });
             }
             if (buildingBlock.block) {
-                buildingBlock.block.paragraph.rich_text = this.addRichText((_a = buildingBlock.block.paragraph.rich_text) !== null && _a !== void 0 ? _a : [], {
-                    type: 'text',
-                    text: {
-                        content: this.content
-                    }
-                });
+                buildingBlock.block.paragraph.rich_text = this.addRichText((_a = buildingBlock.block.paragraph.rich_text) !== null && _a !== void 0 ? _a : [], richText);
             }
             return buildingBlock;
         };

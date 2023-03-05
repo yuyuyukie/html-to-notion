@@ -1,5 +1,8 @@
 import { ApiColor, EmojiRequest, EmptyObject, IdRequest, LanguageRequest, RichTextItemRequest, TextRequest } from './redefinitions';
 import { BlockObjectRequestWithoutChildren } from '@notionhq/client/build/src/api-endpoints';
+export type Attributes = {
+    [p: string]: string | undefined;
+};
 export type BaseBlockObject<T> = {
     type?: T;
     object?: 'block';
